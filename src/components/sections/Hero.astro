@@ -59,16 +59,164 @@ import { site } from '../../data/site';
         <span class="sticker__play">▶</span><span class="sticker__k mono">Now playing</span><span class="sticker__v">{site.song.title}<span class="hide-xs">, on loop</span></span>
       </div>
       <div class="drag-ui">
-        <span class="drag-hint" aria-hidden="true">↳ go on, rearrange my desk. Pakkuru will complain.</span>
+        <span class="drag-hint" data-drag-hint aria-hidden="true">↳ go on, rearrange my desk. Pakkuru will complain.</span>
         <button class="tidy" type="button" data-tidy>Tidy up ↺</button>
       </div>
     </div>
     <div class="drag-ui drag-ui--m">
-      <span class="drag-hint" aria-hidden="true">↳ hold & drag then rearrange. Pakkuru will complain.</span>
+      <span class="drag-hint" data-drag-hint aria-hidden="true">↳ press and hold, then drag to rearrange my desk. Pakkuru will complain.</span>
       <button class="tidy" type="button" data-tidy>Tidy up ↺</button>
     </div>
   </div>
 </section>
+
+
+<script>
+  // Drag the collage pieces with a mouse or touch. The reset controls appear
+  // only after at least one piece has actually moved.
+  const collage = document.querySelector('.collage');
+  const pieces = collage ? Array.from(collage.querySelectorAll('.c')) : [];
+  const tidyButtons = Array.from(document.querySelectorAll('[data-tidy]'));
+  const dragHints = Array.from(document.querySelectorAll('[data-drag-hint]'));
+  const movedPieces = new Set();
+  const isTouchDevice = () => window.matchMedia('(pointer: coarse)').matches;
+  let activeDrag = null;
+  let holdTimer = null;
+  let touchStart = null;
+
+  const showTidyButtons = () => {
+    tidyButtons.forEach((button) => button.classList.add('is-on'));
+  };
+
+  const hideTidyButtons = () => {
+    tidyButtons.forEach((button) => button.classList.remove('is-on'));
+  };
+
+  const showDragHints = () => {
+    dragHints.forEach((hint) => hint.classList.add('is-on'));
+  };
+
+  const hideDragHints = () => {
+    dragHints.forEach((hint) => hint.classList.remove('is-on'));
+  };
+
+  const startDrag = (piece, event, startX, startY, startDx, startDy) => {
+    activeDrag = {
+      piece,
+      pointerId: event.pointerId,
+      startX,
+      startY,
+      startDx,
+      startDy,
+      moved: false,
+      originalZIndex: piece.style.zIndex,
+    };
+    piece.classList.remove('is-pressing');
+    piece.classList.add('is-dragging');
+    piece.style.zIndex = '20';
+    try {
+      piece.setPointerCapture(event.pointerId);
+    } catch (_) {
+      // Pointer capture may be unavailable in older browsers.
+    }
+  };
+
+  pieces.forEach((piece) => {
+    piece.setAttribute('draggable', 'false');
+    piece.setAttribute('aria-label', 'Draggable collage item');
+
+    piece.addEventListener('pointerdown', (event) => {
+      if (event.button !== undefined && event.button !== 0) return;
+      if (activeDrag) return;
+
+      const startDx = Number.parseFloat(getComputedStyle(piece).getPropertyValue('--dx')) || 0;
+      const startDy = Number.parseFloat(getComputedStyle(piece).getPropertyValue('--dy')) || 0;
+      piece.classList.add('is-pressing');
+      touchStart = { x: event.clientX, y: event.clientY, piece, event, startDx, startDy };
+
+      if (isTouchDevice()) {
+        // A short hold distinguishes an intentional drag from a casual tap.
+        holdTimer = window.setTimeout(() => {
+          if (!touchStart || touchStart.piece !== piece) return;
+          startDrag(piece, event, touchStart.x, touchStart.y, startDx, startDy);
+          touchStart = null;
+        }, 160);
+      } else {
+        event.preventDefault();
+        startDrag(piece, event, event.clientX, event.clientY, startDx, startDy);
+        touchStart = null;
+      }
+    });
+
+    piece.addEventListener('pointermove', (event) => {
+      if (touchStart && touchStart.piece === piece && !activeDrag) {
+        const distance = Math.hypot(event.clientX - touchStart.x, event.clientY - touchStart.y);
+        if (distance > 10) {
+          window.clearTimeout(holdTimer);
+          holdTimer = null;
+          piece.classList.remove('is-pressing');
+          touchStart = null;
+        }
+      }
+
+      if (!activeDrag || activeDrag.piece !== piece || activeDrag.pointerId !== event.pointerId) return;
+      event.preventDefault();
+      const dx = activeDrag.startDx + event.clientX - activeDrag.startX;
+      const dy = activeDrag.startDy + event.clientY - activeDrag.startY;
+      piece.style.setProperty('--dx', `${dx}px`);
+      piece.style.setProperty('--dy', `${dy}px`);
+      if (Math.abs(dx - activeDrag.startDx) > 2 || Math.abs(dy - activeDrag.startDy) > 2) {
+        activeDrag.moved = true;
+        showDragHints();
+      }
+    });
+
+    const finishDrag = (event) => {
+      window.clearTimeout(holdTimer);
+      holdTimer = null;
+      piece.classList.remove('is-pressing');
+
+      if (activeDrag && activeDrag.piece === piece && activeDrag.pointerId === event.pointerId) {
+        const drag = activeDrag;
+        piece.classList.remove('is-dragging');
+        piece.classList.add('is-returning');
+        piece.style.zIndex = drag.originalZIndex;
+        window.setTimeout(() => piece.classList.remove('is-returning'), 850);
+        if (drag.moved) {
+          movedPieces.add(piece);
+          showTidyButtons();
+        }
+        activeDrag = null;
+      }
+      touchStart = null;
+    };
+
+    piece.addEventListener('pointerup', finishDrag);
+    piece.addEventListener('pointercancel', finishDrag);
+    piece.addEventListener('lostpointercapture', (event) => {
+      if (activeDrag && activeDrag.piece === piece && activeDrag.pointerId === event.pointerId) {
+        finishDrag(event);
+      }
+    });
+    piece.addEventListener('dragstart', (event) => event.preventDefault());
+  });
+
+  tidyButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      pieces.forEach((piece) => {
+        piece.classList.remove('is-dragging', 'is-pressing');
+        piece.classList.add('is-returning');
+        piece.style.removeProperty('--dx');
+        piece.style.removeProperty('--dy');
+        piece.style.removeProperty('z-index');
+        window.setTimeout(() => piece.classList.remove('is-returning'), 850);
+      });
+      movedPieces.clear();
+      hideTidyButtons();
+      hideDragHints();
+    });
+  });
+</script>
 
 <style>
   .hero { position: relative; padding-top: clamp(104px, 10vw, 148px); padding-bottom: clamp(56px, 7.8vw, 112px); background-image: repeating-linear-gradient(to bottom, transparent 0 31px, rgb(157 184 211 / .22) 31px 32px); overflow: clip; }
@@ -95,15 +243,18 @@ import { site } from '../../data/site';
   /* Collage — positions mirror the Figma frame (400×600) */
   .collage { position: relative; width: 100%; max-width: 400px; aspect-ratio: 400 / 600; justify-self: end; --mx: 0; --my: 0; }
   .c { position: absolute; transform: translate3d(calc(var(--mx) * var(--depth) * 1px + var(--dx, 0px)), calc(var(--my) * var(--depth) * 1px + var(--dy, 0px)), 0) rotate(var(--rot, 0deg)); transition: transform .6s var(--ease-out); }
-  .c { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .c { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: none; }
   .c.is-pressing { scale: 1.04; transition: transform .6s var(--ease-out), scale .28s var(--ease-out); }
   .c.is-dragging { cursor: grabbing; transition: none; scale: 1.04; --rot: var(--drag-rot, 0deg); filter: drop-shadow(0 18px 22px rgb(31 36 51 / .18)); }
-  @media (pointer: fine) { .c { cursor: grab; touch-action: none; } }
+  .c { cursor: grab; }
+  .c.is-pressing { cursor: grabbing; }
   .c.is-returning { transition: transform .8s var(--ease-spring); }
   .drag-ui { position: absolute; left: 0; right: 0; top: calc(100% + 18px); display: none; align-items: center; justify-content: space-between; gap: 12px; }
   @media (min-width: 861px) { .drag-ui { display: flex; } }
   .drag-ui--m { display: none; }
-  .drag-hint { font: 400 22px/1.1 var(--f-hand); color: var(--red); }
+  .drag-hint { font: 400 22px/1.1 var(--f-hand); color: var(--red); opacity: 0; visibility: hidden; transform: translateY(5px); transition: opacity .25s ease, transform .3s ease, visibility .25s; }
+  .drag-hint.is-on { opacity: 1; visibility: visible; transform: translateY(0); }
+  .drag-ui--m .drag-hint { font-size: 20px; }
   .tidy { display: inline-flex; flex-shrink: 0; white-space: nowrap; align-items: center; gap: 6px; min-height: 36px; padding: 6px 14px; border: 1px solid var(--ink); border-radius: 999px; font: 500 13px/1 var(--f-body); background: var(--paper); opacity: 0; transform: translateY(6px); pointer-events: none; transition: opacity .3s, transform .4s var(--ease-spring), background-color .25s, color .25s; }
   .tidy:not(.is-on) { display: none; }
   .tidy.is-on { opacity: 1; transform: none; pointer-events: auto; animation: tidy-in .45s var(--ease-spring); }
