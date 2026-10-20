@@ -80,7 +80,7 @@ export const hobbies = [
   { key: 'crochet', name: 'Handmade flowers', photo: true, pos: '50% 50%', alt: 'Handmade bouquet of orange and yellow sunflowers with lavender sprigs', desc: 'Yes, I made these. They never wilt. Storage is another story.' },
   { key: 'drawing', name: 'Drawing', photo: true, pos: '50% 45%', alt: 'Coloured-pencil drawing of a sleeping white bunny curled up on autumn leaves', desc: 'Yes, I drew this. The bunny sat still. Ledgers rarely do.' },
   { key: 'music', name: 'Music', photo: true, pos: '50% 50%', alt: 'Black-and-white cat wearing white headphones by the sea', desc: 'On loop: Veesum Velichathile, Naan Ee. Yes, the housefly film.' },
-  { key: 'mehndi', name: 'Mehndi (a little)', photo: true, pos: '50% 42%', alt: 'Floral mehndi design on the palm of a hand', desc: 'Yes, that’s my mehndi. Steady hands, clean lines, like my ledgers.' },
+  { key: 'mehndi', name: 'Mehndi', photo: true, pos: '50% 42%', alt: 'Floral mehndi design on the palm of a hand', desc: 'Yes, that’s my mehndi. Steady hands, clean lines, like my ledgers.' },
   { key: 'rangoli', name: 'Rangoli', photo: true, pos: '50% 50%', alt: 'Circular flower-petal rangoli with a pinwheel centre in maroon, white, yellow, orange and purple', desc: 'Yes, I made this. Every petal accounted for.' },
 ];
 
