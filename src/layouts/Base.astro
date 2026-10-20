@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+import Sprite from '../components/motifs/Sprite.astro';
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#F5EFE3" />
+    <meta name="author" content={site.fullName} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL("/og.jpg", Astro.site ?? Astro.url).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" href="/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      // Decide before first paint: splash only on first visit per session, never with reduced motion.
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!reduce) d.classList.add('motion-ok');
+          if (!reduce && !sessionStorage.getItem('am-splash')) {
+            d.classList.add('splash-on');
+            sessionStorage.setItem('am-splash', '1');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <Sprite />
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="margin-rule" aria-hidden="true"></div>
+    <slot />
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

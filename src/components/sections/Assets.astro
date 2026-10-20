@@ -1,0 +1,80 @@
+---
+import Sunflower from '../motifs/Sunflower.astro';
+import LavenderFlower from '../motifs/LavenderFlower.astro';
+import { assets } from '../../data/site';
+---
+<section class="section" id="assets" aria-labelledby="assets-title">
+  <div class="shell">
+    <div class="section-head section-head--band">
+      <p class="eyebrow">03 · Assets</p>
+      <h2 class="h2" id="assets-title">Assets. (Liquid, mostly.)</h2>
+      <p class="lede">The skills, listed plainly. No progress bars — nobody can explain what 85% of Tally means.</p>
+      <div class="section-motif motif-flowers" aria-hidden="true">
+        <Sunflower class="mf-sun" /><LavenderFlower class="mf-lav" />
+      </div>
+    </div>
+    <ul class="assets">
+      {assets.map((a) => (
+        <li class="asset">
+          <span class="asset__code mono" aria-hidden="true"><span>{a.code}</span><span>✓ Posted</span></span>
+          <h3>{a.name}</h3>
+          <p>{a.desc}</p>
+        </li>
+      ))}
+      <li class="asset asset--liab">
+        <button type="button" class="liab" data-liab aria-live="polite">
+          <span class="asset__code mono">L-01</span>
+          <span class="liab__title">Liabilities</span>
+          <span class="liab__text" data-a>Owns more yarn than storage. Hums while reconciling. Working on one of these.</span>
+          <span class="liab__text" data-b hidden>Audit note: yarn reclassified as an asset. Humming remains under review.</span>
+          <span class="liab__hint mono">Tap to audit</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .motif-flowers { width: clamp(104px, 15vw, 216px); aspect-ratio: 216 / 190; top: -10px; }
+  .motif-flowers :global(.mf-sun) { position: absolute; left: 0; top: 0; width: 79%; }
+  .motif-flowers :global(.mf-lav) { position: absolute; right: 0; bottom: 0; width: 36%; }
+  :global(html.motion-ok) .motif-flowers :global(.mf-sun) { animation: spin 90s linear infinite reverse; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .assets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+  .asset { position: relative; display: grid; align-content: start; gap: 12px; padding: 26px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); transition: transform .45s var(--ease-spring), box-shadow .45s var(--ease-out), border-color .3s; }
+  .asset:hover { transform: translateY(-6px) rotate(-.6deg); box-shadow: 0 16px 30px -12px rgb(31 36 51 / .22); border-color: var(--lav); }
+  .asset h3 { font: 600 22px/1.2 var(--f-display); letter-spacing: -0.01em; }
+  .asset p { color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .asset__code { display: block; height: 1.3em; overflow: hidden; font-size: 13px; color: var(--red); }
+  .asset__code span { display: block; height: 1.3em; line-height: 1.3em; transition: transform .45s var(--ease-out); }
+  .asset__code span:last-child { color: var(--henna); }
+  .asset:hover .asset__code span { transform: translateY(-100%); }
+
+  .asset--liab { padding: 0; background: var(--lav); border-color: var(--lav); }
+  .liab { display: grid; align-content: start; gap: 12px; width: 100%; height: 100%; padding: 26px; text-align: left; border-radius: inherit; }
+  .liab .asset__code { color: var(--ink); }
+  .liab__title { font: 600 22px/1.2 var(--f-display); letter-spacing: -0.01em; }
+  .liab__text { display: block; color: var(--ink); font-size: 15px; line-height: 1.5; }
+  .liab__text[hidden] { display: none; }
+  .liab__hint { margin-top: auto; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+  .liab.is-wobble { animation: wobble .6s var(--ease-out); }
+  @keyframes wobble { 20% { transform: rotate(-3deg); } 45% { transform: rotate(2.5deg); } 70% { transform: rotate(-1.2deg); } }
+
+  @media (max-width: 1100px) { .assets { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 860px) { .motif-flowers { width: 88px; } .section-head { --motif-w: 88px; } }
+  @media (max-width: 640px) {
+    .asset--liab { display: block; padding: 0; }
+    .assets { grid-template-columns: 1fr; gap: 0; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .asset { grid-template-columns: 48px 1fr; gap: 3px 12px; padding: 16px 18px; border: 0; border-radius: 0; }
+    .asset + .asset { border-top: 1px solid var(--line); }
+    .asset:hover { transform: none; box-shadow: none; }
+    .asset__code { grid-row: span 2; font-size: 12px; padding-top: 4px; }
+    .asset h3 { font-size: 18px; }
+    .asset p { font-size: 14px; }
+    .liab { grid-template-columns: 48px 1fr; gap: 3px 12px; padding: 16px 18px; }
+    .liab .asset__code { grid-row: span 3; }
+    .liab__title { font-size: 18px; } .liab__text { font-size: 14px; }
+    .liab__hint { grid-column: 2; margin-top: 6px; }
+  }
+</style>

@@ -1,0 +1,21 @@
+---
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+const r = (n: number) => Math.round(n * 100) / 100;
+const petals = Array.from({ length: 8 }, (_, i) => ({ a: i * 45, fill: i % 2 ? '#B9A6E0' : '#F5B82E' }));
+const dots = Array.from({ length: 8 }, (_, i) => { const a = (i * Math.PI) / 4 + Math.PI / 8; return [r(100 + Math.cos(a) * 56), r(100 + Math.sin(a) * 56)]; });
+const corner = Array.from({ length: 4 }, (_, i) => { const a = (i * Math.PI) / 2 + Math.PI / 4; return [r(100 + Math.cos(a) * 66), r(100 + Math.sin(a) * 66)]; });
+const tips = [[100, 8], [100, 192], [8, 100], [192, 100]];
+---
+<svg class={`motif rangoli ${cls}`} viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+  <polygon points="100,7 193,100 100,193 7,100" fill="none" stroke="#B3261E" stroke-width="1.5" />
+  <circle cx="100" cy="100" r="64" fill="none" stroke="#5E4B8B" stroke-width="1.5" stroke-dasharray="1 5" stroke-linecap="round" />
+  <g class="rangoli__petals">
+    {petals.map((p) => <ellipse cx="140" cy="100" rx="20" ry="10" fill={p.fill} transform={`rotate(${p.a} 100 100)`} />)}
+  </g>
+  {dots.map(([x, y]) => <circle cx={x} cy={y} r="3" fill="#5E4B8B" />)}
+  <circle cx="100" cy="100" r="17" fill="#B3261E" />
+  <circle cx="100" cy="100" r="6" fill="#F5B82E" />
+  {tips.map(([x, y]) => (<><circle cx={x} cy={y} r="3.5" fill="#1F2433" /><circle cx={x} cy={y} r="10" fill="none" stroke="#5E4B8B" stroke-width="1.2" /></>))}
+  {corner.map(([x, y]) => <circle cx={x} cy={y} r="2.5" fill="#1F2433" />)}
+</svg>

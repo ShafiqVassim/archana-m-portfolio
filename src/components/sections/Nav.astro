@@ -1,0 +1,40 @@
+---
+import LogoMark from '../motifs/LogoMark.astro';
+import { site, nav } from '../../data/site';
+---
+<header class="nav" id="nav">
+  <div class="shell nav__inner">
+    <a class="logo" href="#top" data-scroll aria-label={`${site.name} — back to top`}>
+      <LogoMark class="logo__mark" /><span>{site.name}</span>
+    </a>
+    <nav class="nav__links" aria-label="Sections">
+      {nav.slice(0, 4).map((n) => <a href={`#${n.id}`} data-scroll>{n.label}</a>)}
+    </nav>
+    <div class="nav__actions">
+      <button class="btn btn--sm btn--ghost nav__contents" type="button" data-open-contents aria-haspopup="dialog">Contents</button>
+      <a class="btn btn--sm nav__hire" href="#contact" data-scroll data-magnetic><LogoMark /><span class="btn__label">Hire me</span></a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav { position: fixed; inset: 0 0 auto; z-index: 40; transition: transform .45s var(--ease-out), background-color .3s, box-shadow .3s; }
+  .nav.is-scrolled { background: rgb(245 239 227 / .86); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); }
+  .nav.is-hidden { transform: translateY(-105%); }
+  .nav__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: max(14px, env(safe-area-inset-top)); padding-bottom: 14px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 600 24px/1 var(--f-display); letter-spacing: -0.02em; }
+  .logo :global(.logo__mark) { width: 34px; height: 34px; transition: transform .9s var(--ease-out); }
+  .logo:hover :global(.logo__mark) { transform: rotate(120deg); }
+  .nav__links { display: flex; gap: 32px; }
+  .nav__links a { position: relative; text-decoration: none; font-weight: 500; font-size: 15px; padding: 6px 0; }
+  .nav__links a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px; background: var(--red); transform: scaleX(0); transform-origin: right; transition: transform .35s var(--ease-out); }
+  .nav__links a:hover::after, .nav__links a[aria-current='true']::after { transform: scaleX(1); transform-origin: left; }
+  .nav__actions { display: flex; gap: 10px; }
+  .nav__contents { display: none; }
+  @media (max-width: 860px) {
+    .nav__links, .nav__hire { display: none; }
+    .nav__contents { display: inline-flex; }
+    .logo { font-size: 21px; }
+    .logo :global(.logo__mark) { width: 30px; height: 30px; }
+  }
+</style>

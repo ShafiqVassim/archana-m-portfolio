@@ -1,0 +1,6 @@
+---
+import SprigGroup from './SprigGroup.astro';
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<svg class={`motif sprig-svg ${cls}`} viewBox="0 0 90 230" aria-hidden="true" focusable="false"><SprigGroup /></svg>

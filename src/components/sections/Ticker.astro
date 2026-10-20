@@ -1,0 +1,23 @@
+---
+const items = ['Tally', 'Billing & invoicing', 'GST support', 'Payroll support', 'Ledgers', 'Cash handling', 'Crochet (unbilled)'];
+---
+<div class="ticker on-ink" role="region" aria-label="Skills summary">
+  <p class="sr-only">{items.join(', ')}</p>
+  <div class="ticker__track" aria-hidden="true">
+    {[0, 1].map(() => (
+      <ul>{items.map((t) => <li class={t.startsWith('Crochet') ? 'is-lav' : ''}>{t}<span>✿</span></li>)}</ul>
+    ))}
+  </div>
+</div>
+<style>
+  .ticker { background: var(--ink); color: var(--paper); overflow: hidden; padding: 18px 0; }
+  .ticker__track { display: flex; width: max-content; }
+  ul { display: flex; flex-shrink: 0; }
+  li { display: flex; align-items: center; gap: 28px; padding-right: 28px; font: 500 15px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+  li span { color: var(--sun); font-family: var(--f-body); }
+  .is-lav { color: var(--lav); }
+  :global(html.motion-ok) .ticker__track { animation: marquee 38s linear infinite; }
+  .ticker:hover .ticker__track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (max-width: 640px) { li { font-size: 12px; gap: 16px; padding-right: 16px; } .ticker { padding: 14px 0; } }
+</style>

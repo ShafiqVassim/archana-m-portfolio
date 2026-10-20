@@ -1,0 +1,24 @@
+---
+// Mehndi mandala. Drawn once as a sprite symbol (currentColor); instances are <use> refs.
+interface Props { class?: string; color?: string; symbol?: boolean }
+const { class: cls = '', color = '#7A4A2B', symbol = false } = Astro.props;
+const r = (n: number) => Math.round(n * 100) / 100;
+const R = 264.7, c = 180;
+const ring = (n: number, rad: number, off = 0) => Array.from({ length: n }, (_, i) => { const a = (i * 2 * Math.PI) / n + off; return [r(c + Math.cos(a) * rad), r(c + Math.sin(a) * rad)]; });
+---
+{symbol ? (
+  <symbol id="m-mandala" viewBox="-36 -36 432 432">
+    <g fill="none" stroke="currentColor" stroke-width="1.3">
+      <circle cx={c} cy={c} r={r(R * 0.25)} />
+      <circle cx={c} cy={c} r={r(R * 0.475)} />
+      {ring(16, R * 0.6).map(([x, y]) => <circle cx={x} cy={y} r={r(R * 0.08)} />)}
+    </g>
+    <g fill="currentColor">
+      <circle cx={c} cy={c} r={r(R * 0.11)} />
+      {ring(12, R * 0.36).map(([x, y]) => <circle cx={x} cy={y} r="2.5" />)}
+      {ring(32, R * 0.8).map(([x, y]) => <circle cx={x} cy={y} r="1.6" />)}
+    </g>
+  </symbol>
+) : (
+  <svg class={`motif mandala ${cls}`} viewBox="-36 -36 432 432" style={`color:${color}`} aria-hidden="true" focusable="false"><use href="#m-mandala" /></svg>
+)}

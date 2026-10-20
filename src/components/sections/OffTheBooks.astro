@@ -1,0 +1,170 @@
+---
+import Bouquet from '../motifs/Bouquet.astro';
+import Sunflower from '../motifs/Sunflower.astro';
+import LavenderFlower from '../motifs/LavenderFlower.astro';
+import Rangoli from '../motifs/Rangoli.astro';
+import Mandala from '../motifs/Mandala.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { hobbies, site } from '../../data/site';
+const photos = import.meta.glob<{ default: ImageMetadata }>('../../assets/hobbies/*.jpg', { eager: true });
+const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default;
+---
+<section class="section otb" id="off-the-books" aria-labelledby="otb-title" data-player-scope>
+  <div class="shell">
+    <div class="section-head section-head--band">
+      <p class="eyebrow">04 · Off the books</p>
+      <h2 class="h2" id="otb-title">Off the books.</h2>
+      <p class="lede">Unbilled hours. Entirely voluntary. No GST applicable.</p>
+      <p class="note otb__note">↳ yes, these are real. yes, I made them. no, I won’t stop mentioning it.</p>
+      <div class="section-motif motif-bouquet" aria-hidden="true"><Bouquet /></div>
+    </div>
+  </div>
+
+  <div class="carousel" data-carousel>
+    <ul class="hobbies shell" data-track>
+      {hobbies.map((h) => (
+        <li class="hobby">
+          <div class={`art art--${h.key}`} aria-hidden={h.photo ? undefined : 'true'}>
+            {site.showPlaceholderTags && <span class="ph-tag">Placeholder</span>}
+            {h.photo && photoFor(h.key) && (
+              <Image src={photoFor(h.key)!} alt={h.alt} widths={[320, 640]} sizes="(max-width: 1100px) 72vw, 220px" format="webp" quality={78} loading="lazy" decoding="async" class="art__photo" style={`object-position:${h.pos}`} />
+            )}
+            {!h.photo && h.key === 'drawing' && (
+              <svg viewBox="0 0 275 300" class="art__svg" data-reveal>
+                {Array.from({ length: 10 }, (_, i) => <line x1="0" x2="275" y1={30 + i * 26} y2={30 + i * 26} stroke="#9DB8D3" stroke-opacity=".5" />)}
+                <path class="draw" pathLength="1" d="M70 130 C100 70 160 70 180 120 C200 170 130 200 110 160 C90 120 160 90 200 130" fill="none" stroke="#1F2433" stroke-width="2.5" stroke-linecap="round" />
+                <path class="draw draw--late" pathLength="1" d="M40 230 C80 210 120 250 160 230 C200 210 220 240 240 230" fill="none" stroke="#B3261E" stroke-width="2" stroke-linecap="round" />
+                <text x="137" y="270" text-anchor="middle" font-family="Caveat, cursive" font-size="22" fill="#5A5F6E">(a flower, allegedly)</text>
+              </svg>
+            )}
+            {!h.photo && h.key === 'crochet' && (<><Sunflower class="art__sun" /><LavenderFlower class="art__lav" /></>)}
+            {!h.photo && h.key === 'mehndi' && <Mandala class="art__mandala" />}
+            {!h.photo && h.key === 'rangoli' && <Rangoli class="art__rangoli" />}
+            {h.key === 'music' && (
+              <svg viewBox="0 0 275 300" class="art__svg cassette">
+                <rect x="38" y="82" width="200" height="136" rx="12" fill="#1F2433" />
+                <rect x="52" y="94" width="172" height="50" rx="6" fill="#F5B82E" />
+                <text x="64" y="112" font-family="IBM Plex Mono, monospace" font-weight="500" font-size="9" letter-spacing=".6" fill="#1F2433">SIDE A · ON LOOP</text>
+                <text x="64" y="134" font-family="Caveat, cursive" font-size="19" fill="#1F2433">{site.song.title}</text>
+                <g class="reel" style="transform-origin: 96px 180px"><circle cx="96" cy="180" r="17" fill="#fff" /><circle cx="96" cy="180" r="6" fill="#1F2433" /><rect x="94.5" y="165" width="3" height="8" fill="#1F2433" /></g>
+                <g class="reel" style="transform-origin: 180px 180px"><circle cx="180" cy="180" r="17" fill="#fff" /><circle cx="180" cy="180" r="6" fill="#1F2433" /><rect x="178.5" y="165" width="3" height="8" fill="#1F2433" /></g>
+              </svg>
+            )}
+          </div>
+          <h3>{h.name} <span class="mono unbilled">Unbilled</span></h3>
+          <p>{h.desc}</p>
+        </li>
+      ))}
+    </ul>
+    <div class="dots" aria-hidden="true">{hobbies.map((_, i) => <i class={i === 0 ? 'is-on' : ''}></i>)}</div>
+    <p class="note swipe-hint shell" aria-hidden="true">swipe → more unbilled hours</p>
+  </div>
+
+  <div class="shell">
+    <div class="player" data-player data-track-id={site.spotifyTrackId || undefined}>
+      <button class="disc" type="button" aria-pressed="false" aria-label="Spin the record (animation only)" data-disc>
+        <svg viewBox="0 0 88 88" aria-hidden="true">
+          <circle cx="44" cy="44" r="44" fill="#1F2433" />
+          <circle cx="44" cy="44" r="35" fill="none" stroke="#FFFDF8" stroke-opacity=".18" />
+          <circle cx="44" cy="44" r="27" fill="none" stroke="#FFFDF8" stroke-opacity=".18" />
+          <circle cx="44" cy="44" r="20" fill="#F5B82E" />
+        </svg>
+        <span class="disc__icon" aria-hidden="true"></span>
+      </button>
+      <div class="player__meta">
+        <p class="eyebrow">Now playing</p>
+        <p class="player__title">{site.song.title}</p>
+        <p class="player__sub">from {site.song.film} ({site.song.year}) · {site.song.language}</p>
+      </div>
+      <div class="player__progress" aria-hidden="true">
+        <div class="bar"><i></i><b></b></div>
+        <div class="times mono"><span>Plays: ∞</span><span>Repeat: on</span></div>
+      </div>
+      <a class="btn btn--sm play-btn" href={site.spotify} target="_blank" rel="noopener" data-play>
+        <span class="play-btn__icon" aria-hidden="true">▶</span><span class="btn__label">Play on Spotify</span><span aria-hidden="true">↗</span><span class="sr-only">(opens in a new tab)</span>
+      </a>
+      <p class="note player__note">play count: we don’t talk about it.</p>
+      <div class="player__embed" data-embed hidden></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .otb { background: var(--lav-t); padding-bottom: var(--section-y); margin-top: var(--section-y); padding-top: var(--section-y); }
+  .otb__note { margin-top: 14px; }
+  .motif-bouquet { width: clamp(110px, 16.7vw, 240px); top: -40px; transform-origin: 50% 93%; }
+  :global(html.motion-ok) .motif-bouquet { animation: sway 6s ease-in-out infinite; }
+  @keyframes sway { 50% { transform: rotate(3deg); } }
+
+  .hobbies { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
+  .hobby h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 16px; font: 600 24px/1.2 var(--f-display); letter-spacing: -0.01em; }
+  .unbilled { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
+  .hobby p { margin-top: 8px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .art { position: relative; aspect-ratio: 275 / 300; border-radius: 14px; overflow: hidden; transition: transform .5s var(--ease-spring); }
+  .hobby:hover .art { transform: rotate(-1.2deg) scale(1.02); }
+  .art--drawing { background: var(--paper); } .art--crochet { background: #E4DBF3; } .art--mehndi { background: #F3EBDD; } .art--rangoli { background: #F7EFE0; } .art--music { background: #E8EEF4; }
+  .art__svg { width: 100%; height: 100%; }
+  .art :global(.art__photo) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease-out); }
+  .hobby:hover .art :global(.art__photo) { transform: scale(1.05); }
+  .art :global(.art__sun) { position: absolute; left: 3%; top: 12%; width: 62%; transition: transform .8s var(--ease-out); }
+  .art :global(.art__lav) { position: absolute; left: 58%; top: 50%; width: 36%; transition: transform .8s var(--ease-out); }
+  .hobby:hover .art :global(.art__sun) { transform: rotate(40deg); }
+  .hobby:hover .art :global(.art__lav) { transform: rotate(-60deg) scale(1.08); }
+  .art :global(.art__rangoli) { position: absolute; left: 14%; top: 13%; width: 72%; transition: transform 1.2s var(--ease-out); }
+  .hobby:hover .art :global(.art__rangoli) { transform: rotate(45deg); }
+  .art :global(.art__mandala) { position: absolute; left: -12%; top: -6%; width: 124%; max-width: none; transition: transform 1.2s var(--ease-out); }
+  .hobby:hover .art :global(.art__mandala) { transform: rotate(45deg); }
+  :global(html.motion-ok) .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .art__svg:global(.is-in) .draw { animation: draw 1.6s var(--ease-out) .2s forwards; }
+  .art__svg:global(.is-in) .draw--late { animation-delay: 1s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .reel { transform-box: view-box; }
+  .otb:global(.is-playing) .reel { animation: reel 2s linear infinite; }
+  @keyframes reel { to { transform: rotate(360deg); } }
+
+  .dots, .swipe-hint { display: none; }
+
+  .player { display: grid; grid-template-columns: 88px minmax(0, 1.2fr) minmax(0, 1fr) auto minmax(0, 150px); align-items: center; gap: 28px; margin-top: 40px; padding: 20px 28px 20px 20px; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; }
+  .disc { position: relative; width: 88px; height: 88px; border-radius: 50%; transition: transform .4s var(--ease-spring); }
+  .disc:hover { transform: scale(1.05); }
+  .disc svg { width: 100%; height: 100%; }
+  .disc__icon { position: absolute; left: 50%; top: 50%; width: 0; height: 0; margin: -8px 0 0 -4px; border-style: solid; border-width: 8px 0 8px 13px; border-color: transparent transparent transparent var(--ink); }
+  .otb:global(.is-playing) .disc svg { animation: reel 3s linear infinite; }
+  .otb:global(.is-playing) .disc__icon { border: 0; width: 12px; height: 14px; margin: -7px 0 0 -6px; border-left: 4px solid var(--ink); border-right: 4px solid var(--ink); }
+  .player__title { font: 600 28px/1.15 var(--f-display); letter-spacing: -0.01em; margin-top: 4px; }
+  .player__sub { color: var(--muted); font-size: 15px; }
+  .bar { position: relative; height: 14px; }
+  .bar i { position: absolute; left: 0; right: 0; top: 5px; height: 4px; border-radius: 2px; background: var(--line); }
+  .bar b { position: absolute; left: 0; top: 5px; height: 4px; width: 68%; border-radius: 2px; background: var(--dlav); }
+  .bar b::after { content: ''; position: absolute; right: -7px; top: -5px; width: 14px; height: 14px; border-radius: 50%; background: var(--sun); border: 1.5px solid var(--ink); }
+  .otb:global(.is-playing) .bar b { animation: progress 7s linear infinite; }
+  @keyframes progress { from { width: 0; } to { width: 100%; } }
+  .times { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .play-btn__icon { color: var(--sun); font-size: 12px; }
+  .player__note { font-size: 22px; }
+  .player__embed { grid-column: 1 / -1; }
+  .player__embed iframe { display: block; width: 100%; height: 152px; border: 0; border-radius: 12px; }
+
+  @media (max-width: 1100px) {
+    .player { grid-template-columns: 72px 1fr; gap: 16px 18px; }
+    .disc { width: 72px; height: 72px; }
+    .player__progress, .play-btn, .player__note { grid-column: 1 / -1; }
+    .play-btn { justify-self: stretch; }
+  }
+  @media (max-width: 1100px) {
+    .carousel { position: relative; }
+    .hobbies { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: var(--pad-l); scrollbar-width: none; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
+    .hobbies::-webkit-scrollbar { display: none; }
+    .hobby { flex: 0 0 min(72vw, 300px); scroll-snap-align: start; }
+    .art { aspect-ratio: 260 / 240; }
+    .dots { display: flex; gap: 6px; padding-left: var(--pad-l); margin-top: 18px; align-items: center; }
+    .dots i { width: 6px; height: 6px; border-radius: 3px; background: var(--lav-s); opacity: .4; transition: width .35s var(--ease-out), opacity .35s; }
+    .dots i.is-on { width: 18px; opacity: 1; background: var(--dlav); }
+    .swipe-hint { display: block; margin-top: 6px; font-size: 22px; }
+  }
+  @media (max-width: 860px) {
+    .motif-bouquet { width: 72px; }
+    .section-head { --motif-w: 72px; }
+  }
+</style>

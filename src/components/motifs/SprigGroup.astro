@@ -1,0 +1,10 @@
+---
+import { sprigBuds, sprigLeaves, sprigStem } from './sprig';
+interface Props { transform?: string }
+const { transform } = Astro.props;
+---
+<g transform={transform} class="sprig">
+  <path d={sprigStem} fill="none" stroke="#5E6B2E" stroke-width="2.5" stroke-linecap="round" />
+  {sprigLeaves.map((e) => <ellipse cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} fill={e.fill} transform={`rotate(${e.rot} ${e.cx} ${e.cy})`} />)}
+  {sprigBuds.map((e) => <ellipse cx={e.cx} cy={e.cy} rx={e.rx} ry={e.ry} fill={e.fill} stroke={e.stroke} stroke-width="1" transform={`rotate(${e.rot} ${e.cx} ${e.cy})`} />)}
+</g>

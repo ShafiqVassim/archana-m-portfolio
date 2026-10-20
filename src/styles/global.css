@@ -1,0 +1,102 @@
+/* ───────── Fonts (self-hosted, latin subset) ───────── */
+@font-face { font-family: 'Fraunces'; src: url('/fonts/fraunces-latin-wght-normal.woff2') format('woff2'); font-weight: 300 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Fraunces'; src: url('/fonts/fraunces-latin-wght-italic.woff2') format('woff2'); font-weight: 300 900; font-style: italic; font-display: swap; }
+@font-face { font-family: 'DM Sans'; src: url('/fonts/dm-sans-latin-wght-normal.woff2') format('woff2'); font-weight: 100 1000; font-style: normal; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('/fonts/ibm-plex-mono-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('/fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Caveat'; src: url('/fonts/caveat-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+
+/* ───────── Tokens ───────── */
+:root {
+  --cream: #F5EFE3; --paper: #FFFDF8; --ink: #1F2433; --muted: #5A5F6E;
+  --red: #B3261E; --henna: #5E6B2E; --sun: #F5B82E; --sun-s: #B5821A;
+  --lav: #B9A6E0; --lav-s: #7E6AAE; --dlav: #5E4B8B; --lav-t: #EFEAF8;
+  --seed: #6B4423; --brown: #7A4A2B; --blue: #9DB8D3; --line: #E3D9C6;
+
+  --f-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --f-body: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --f-hand: 'Caveat', 'Segoe Print', 'Bradley Hand', cursive;
+
+  --pad-l: clamp(20px, 11.67vw, 168px);
+  --pad-r: clamp(20px, 7.8vw, 112px);
+  --section-y: clamp(72px, 9vw, 128px);
+  --radius: 16px;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  color-scheme: light;
+}
+
+/* ───────── Base ───────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: clip; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+::selection { background: var(--sun); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--dlav); outline-offset: 3px; border-radius: 6px; }
+.on-ink :focus-visible, .on-ink:focus-visible { outline-color: var(--sun); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip { position: fixed; left: 12px; top: 12px; z-index: 100; padding: 10px 16px; background: var(--ink); color: var(--paper); border-radius: 999px; transform: translateY(-160%); transition: transform .2s var(--ease-out); }
+.skip:focus { transform: none; }
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ───────── Layout ───────── */
+.shell { width: 100%; max-width: 1440px; margin-inline: auto; padding-left: var(--pad-l); padding-right: var(--pad-r); }
+[id] { scroll-margin-top: 72px; }
+.section { position: relative; padding-block: var(--section-y) 0; }
+.section--last { padding-bottom: var(--section-y); }
+.margin-rule { position: fixed; inset-block: 0; left: max(10px, calc(max(0px, (100vw - 1440px) / 2) + var(--pad-l) - 48px)); width: 7.5px; pointer-events: none; z-index: 3; border-inline: 1.5px solid rgb(179 38 30 / .5); }
+
+/* ───────── Type ───────── */
+.eyebrow { font: 500 12px/1.4 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--dlav); }
+.h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(38px, 4.45vw, 64px); line-height: 1.02; letter-spacing: -0.025em; margin-top: 14px; max-width: 18ch; }
+.lede { margin-top: 16px; max-width: 34em; color: var(--muted); font-size: clamp(16px, 1.32vw, 19px); }
+.note { font-family: var(--f-hand); color: var(--red); font-size: clamp(21px, 1.8vw, 26px); line-height: 1.1; }
+.mono { font-family: var(--f-mono); }
+.section-head { position: relative; margin-bottom: clamp(32px, 3.9vw, 56px); }
+.section-motif { position: absolute; right: 0; top: 0; pointer-events: none; }
+@media (max-width: 860px) {
+  .section-head--band .section-motif { top: 26px; }
+  .section-head--band .h2 { max-width: calc(100% - var(--motif-w, 88px) - 12px); font-size: clamp(32px, 9vw, 38px); }
+}
+
+/* ───────── Buttons ───────── */
+.btn { --bg: var(--ink); --fg: var(--paper); --sweep: var(--dlav); position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 14px 26px; border-radius: 999px; background: var(--bg); color: var(--fg); font: 500 16px/1 var(--f-body); text-decoration: none; overflow: hidden; border: 1.5px solid var(--bg); transition: transform .35s var(--ease-spring), color .25s; will-change: transform; -webkit-tap-highlight-color: transparent; }
+.btn::before { content: ''; position: absolute; inset: -2px; z-index: -1; background: var(--sweep); border-radius: inherit; transform: translateY(101%); transition: transform .45s var(--ease-out); }
+.btn:hover::before { transform: translateY(0); }
+.btn:active { transform: scale(.96); }
+.btn__label { display: inline-block; transition: transform .35s var(--ease-out); }
+.btn--ghost { --bg: transparent; --fg: var(--ink); --sweep: var(--ink); border-color: var(--ink); }
+.btn--ghost:hover { color: var(--paper); }
+.btn--sun { --bg: var(--sun); --fg: var(--ink); --sweep: var(--paper); }
+.btn--ghost-light { --bg: transparent; --fg: var(--paper); --sweep: var(--paper); border-color: var(--paper); }
+.btn--ghost-light:hover { color: var(--ink); }
+.btn--sm { min-height: 44px; padding: 10px 18px; font-size: 15px; }
+.btn .logo-mark { width: 0; height: 20px; margin-right: -10px; opacity: 0; transform: rotate(-120deg) scale(.4); transition: width .35s var(--ease-out), margin .35s var(--ease-out), opacity .25s, transform .7s var(--ease-spring); }
+.btn:hover .logo-mark, .btn:focus-visible .logo-mark { width: 20px; margin-right: 0; opacity: 1; transform: none; }
+.btn__stamp { position: absolute; inset: 0; display: grid; place-items: center; font: 500 13px/1 var(--f-mono); letter-spacing: .14em; color: var(--red); background: var(--paper); border: 2px solid var(--red); border-radius: inherit; opacity: 0; transform: scale(1.8) rotate(-8deg); pointer-events: none; }
+.btn.is-stamped .btn__stamp { animation: stamp .9s var(--ease-out) forwards; }
+@keyframes stamp { 0% { opacity: 0; transform: scale(1.8) rotate(-8deg); } 25% { opacity: 1; transform: scale(.94) rotate(-4deg); } 35% { transform: scale(1) rotate(-4deg); } 80% { opacity: 1; } 100% { opacity: 0; transform: scale(1) rotate(-4deg); } }
+
+/* ───────── Placeholder tag ───────── */
+.ph-tag { position: absolute; top: 12px; left: 12px; z-index: 2; padding: 5px 9px; border-radius: 999px; background: var(--ink); color: var(--paper); font: 500 10px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; }
+
+/* ───────── Toast (receipt) ───────── */
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 60; width: min(320px, calc(100vw - 32px)); padding: 16px 18px 18px; background: #fff; color: var(--ink); font: 400 12px/1.6 var(--f-mono); box-shadow: 0 12px 32px rgb(31 36 51 / .18); transform: translate(-50%, calc(100% + 48px)); visibility: hidden; transition: transform .5s var(--ease-spring), visibility 0s .5s; -webkit-mask: radial-gradient(circle 5px at 50% 100%, #0000 98%, #000) 0 0 / 14px 100%; mask: radial-gradient(circle 5px at 50% 100%, #0000 98%, #000) 0 0 / 14px 100%; }
+.toast.is-on { transform: translate(-50%, 0); visibility: visible; transition: transform .5s var(--ease-spring), visibility 0s; }
+.toast strong { font-weight: 500; letter-spacing: .08em; }
+.toast hr { border: 0; border-top: 1px dashed #b9b2a3; margin: 8px 0; }
+
+/* ───────── Reveal hooks (only when motion is allowed + JS ran) ───────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}

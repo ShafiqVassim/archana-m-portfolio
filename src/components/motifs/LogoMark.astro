@@ -1,0 +1,11 @@
+---
+// Solid sunflower used in the logo + favicon (no stitch dashes — survives small sizes).
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+const deg = Array.from({ length: 12 }, (_, i) => i * 30);
+---
+<svg class={`logo-mark ${cls}`} viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+  {deg.map((a) => <ellipse cx="30.46" cy="18" rx="5.04" ry="2.88" fill="#F5B82E" stroke="#B5821A" stroke-width="0.6" transform={`rotate(${a} 18 18)`} />)}
+  <circle cx="18" cy="18" r="8.1" fill="#6B4423" />
+  <circle cx="18" cy="15.6" r="1.1" fill="#D9A441" /><circle cx="15.6" cy="19.4" r="1.1" fill="#D9A441" /><circle cx="20.4" cy="19.4" r="1.1" fill="#D9A441" />
+</svg>

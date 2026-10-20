@@ -1,0 +1,73 @@
+---
+import Rangoli from '../motifs/Rangoli.astro';
+import { experience } from '../../data/site';
+---
+<section class="section" id="ledger" aria-labelledby="ledger-title">
+  <div class="shell">
+    <div class="section-head section-head--band">
+      <p class="eyebrow">02 · Statement of account</p>
+      <h2 class="h2" id="ledger-title">Where the numbers have been.</h2>
+      <p class="lede">Three employers, one consistent habit: everything gets written down, dated, and filed where it belongs.</p>
+      <div class="section-motif motif-rangoli" aria-hidden="true" data-scroll-spin="0.06"><Rangoli /></div>
+    </div>
+
+    <div class="ledger" role="table" aria-label="Employment history" data-reveal>
+      <div class="ledger__head" role="row">
+        <span role="columnheader">Date</span><span role="columnheader">Particulars</span><span role="columnheader">Entries</span><span role="columnheader">Balance</span>
+      </div>
+      {experience.map((j, i) => (
+        <div class="ledger__row" role="row" style={`--i:${i}`}>
+          <div class="ledger__date mono" role="cell">{j.dates[0]} —{' '}<br />{j.dates[1]}</div>
+          <div class="ledger__part" role="cell"><h3>{j.company}</h3><p>{j.role}</p></div>
+          <div class="ledger__entries" role="cell"><ul>{j.entries.map((e) => <li>{e}</li>)}</ul></div>
+          <div class="ledger__bal" role="cell">
+            <span class:list={['ledger__stamp mono', { 'is-current': j.current }]}>{j.balance}</span>
+            <span class="note ledger__note">↳ {j.note}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .motif-rangoli { width: clamp(104px, 13.9vw, 200px); top: -8px; }
+  .ledger { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .ledger__head, .ledger__row { display: grid; grid-template-columns: 190fr 290fr 420fr 152fr; gap: 20px; padding: 26px 24px; }
+  .ledger__head { background: var(--ink); color: var(--paper); padding-block: 18px; font: 500 12px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; }
+  .ledger__row + .ledger__row { border-top: 1px solid var(--line); }
+  .ledger__row:nth-child(odd) { background: var(--cream); }
+  .ledger__date { font-size: 14px; line-height: 1.5; text-transform: uppercase; }
+  .ledger__part h3 { font: 600 22px/1.2 var(--f-display); letter-spacing: -0.01em; }
+  .ledger__part p { margin-top: 6px; color: var(--muted); font-size: 15px; }
+  .ledger__entries ul { display: grid; gap: 4px; font-size: 15px; line-height: 1.55; }
+  .ledger__entries li { position: relative; padding-left: 16px; }
+  .ledger__entries li::before { content: ''; position: absolute; left: 0; top: .7em; width: 6px; height: 6px; border-radius: 50%; background: var(--lav-s); }
+  .ledger__bal { display: grid; align-content: start; gap: 6px; }
+  .ledger__stamp { justify-self: start; font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  .ledger__stamp.is-current { color: var(--henna); }
+  .ledger__note { font-size: 22px; }
+
+  /* "Posting" animation: rows ink in one by one, the balance stamps down */
+  :global(html.motion-ok) .ledger__row { clip-path: inset(0 100% 0 0); }
+  :global(html.motion-ok) .ledger__stamp { opacity: 0; }
+  .ledger:global(.is-in) .ledger__row { animation: post .9s var(--ease-out) calc(.1s + var(--i) * .18s) forwards; }
+  .ledger:global(.is-in) .ledger__stamp { animation: stamp-down .5s var(--ease-spring) calc(.75s + var(--i) * .18s) forwards; }
+  @keyframes post { to { clip-path: inset(0 0 0 0); } }
+  @keyframes stamp-down { from { opacity: 0; transform: scale(1.7) rotate(-6deg); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 860px) {
+    .motif-rangoli { width: 80px; }
+    .section-head { --motif-w: 80px; }
+    .ledger { background: none; border: 0; border-radius: 0; overflow: visible; display: grid; gap: 16px; }
+    .ledger__head { display: none; }
+    .ledger__row, .ledger__row:nth-child(odd) { background: var(--paper); border: 1px solid var(--line) !important; border-radius: var(--radius); grid-template-columns: 1fr auto; grid-template-areas: 'date stamp' 'rule rule' 'part part' 'entries entries' 'note note'; gap: 10px 12px; padding: 22px; }
+    .ledger__row::before { content: ''; grid-area: rule; border-top: 1px dashed var(--line); }
+    .ledger__date { grid-area: date; font-size: 12px; }
+    .ledger__date br { display: none; }
+    .ledger__bal { display: contents; }
+    .ledger__stamp { grid-area: stamp; justify-self: end; font-size: 11px; }
+    .ledger__part { grid-area: part; } .ledger__entries { grid-area: entries; } .ledger__note { grid-area: note; }
+    :global(html.motion-ok) .ledger__row { clip-path: inset(0 0 100% 0); }
+  }
+</style>

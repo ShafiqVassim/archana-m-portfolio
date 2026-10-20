@@ -1,0 +1,17 @@
+---
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+const leaves = [70, 190, 310];
+const knots = [10, 130, 250, 370];
+---
+<svg class={`motif vine ${cls}`} viewBox="0 0 380 70" aria-hidden="true" focusable="false">
+  <path class="vine__line" pathLength="1" d="M10 40 C50 10 90 70 130 40 C170 10 210 70 250 40 C290 10 330 70 370 40" fill="none" stroke="#7A4A2B" stroke-width="1.5" stroke-linecap="round" />
+  {leaves.map((x) => (
+    <g class="vine__leaf">
+      <ellipse cx={x + 4} cy="24" rx="11" ry="5" fill="none" stroke="#7A4A2B" stroke-width="1.2" transform={`rotate(-45.8 ${x + 4} 24)`} />
+      <ellipse cx={x + 16} cy="46" rx="11" ry="5" fill="none" stroke="#7A4A2B" stroke-width="1.2" transform={`rotate(45.8 ${x + 16} 46)`} />
+      <circle cx={x + 10} cy="35" r="2" fill="#7A4A2B" />
+    </g>
+  ))}
+  {knots.map((x) => (<g class="vine__leaf"><circle cx={x} cy="35" r="4.5" fill="none" stroke="#7A4A2B" stroke-width="1.2" /><circle cx={x} cy="35" r="1.5" fill="#7A4A2B" /></g>))}
+</svg>

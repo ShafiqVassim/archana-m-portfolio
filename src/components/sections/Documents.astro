@@ -1,0 +1,71 @@
+---
+import MehndiVine from '../motifs/MehndiVine.astro';
+import { education, certifications, languages } from '../../data/site';
+const cards = [
+  { title: 'Education', items: education },
+  { title: 'Certifications', items: certifications },
+];
+---
+<section class="section" id="documents" aria-labelledby="docs-title">
+  <div class="shell">
+    <div class="section-head">
+      <p class="eyebrow">05 · Supporting documents</p>
+      <h2 class="h2" id="docs-title">The audit trail.</h2>
+      <p class="lede">Education and certifications. Filed, dated, and available on request — like everything else.</p>
+      <div class="section-motif motif-vine" aria-hidden="true" data-reveal><MehndiVine /></div>
+    </div>
+    <div class="docs">
+      {cards.map((c) => (
+        <article class="doc">
+          <h3 class="doc__title mono">{c.title}</h3>
+          <ul>
+            {c.items.map((it) => (
+              <li><span class="mono doc__when">{it.when}</span><span class="doc__body"><strong>{it.title}</strong><span>{it.where}</span></span></li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+    <div class="langs">
+      <span class="eyebrow langs__k">Languages</span>
+      {languages.map((l) => <span class="chip">{l}</span>)}
+      <span class="note">also fluent: spreadsheet &amp; sarcasm</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .motif-vine { width: clamp(220px, 26vw, 380px); top: auto; bottom: 18px; }
+  :global(html.motion-ok) .motif-vine :global(.vine__line) { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  :global(html.motion-ok) .motif-vine :global(.vine__leaf) { opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .motif-vine:global(.is-in) :global(.vine__line) { animation: draw 1.8s var(--ease-out) forwards; }
+  .motif-vine:global(.is-in) :global(.vine__leaf) { animation: leaf .5s var(--ease-spring) forwards; }
+  .motif-vine:global(.is-in) :global(.vine__leaf:nth-of-type(2)) { animation-delay: .4s; }
+  .motif-vine:global(.is-in) :global(.vine__leaf:nth-of-type(3)) { animation-delay: .8s; }
+  .motif-vine:global(.is-in) :global(.vine__leaf:nth-of-type(n+4)) { animation-delay: 1.1s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes leaf { from { opacity: 0; transform: scale(.2); } to { opacity: 1; transform: none; } }
+
+  .docs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .doc { padding: 28px 32px 12px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); }
+  .doc__title { font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
+  .doc li { display: grid; grid-template-columns: 120px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px dashed var(--line); }
+  .doc li:last-child { border-bottom: 0; }
+  .doc__when { font-size: 13px; text-transform: uppercase; padding-top: 4px; }
+  .doc__body { display: grid; gap: 4px; }
+  .doc__body strong { font: 600 20px/1.25 var(--f-display); }
+  .doc__body span { color: var(--muted); font-size: 15px; }
+  .langs { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 40px; }
+  .langs__k { color: var(--muted); margin-right: 4px; }
+  .chip { padding: 8px 16px; border: 1px solid var(--ink); border-radius: 999px; font-weight: 500; font-size: 15px; transition: background-color .25s, color .25s; }
+  .chip:hover { background: var(--ink); color: var(--paper); }
+  @media (max-width: 860px) {
+    .docs { grid-template-columns: 1fr; }
+    .section-head { padding-bottom: 64px; }
+    .motif-vine { width: 240px; left: 0; right: auto; bottom: 0; }
+    .doc { padding: 22px 22px 6px; }
+    .doc li { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
+    .doc__when { font-size: 11px; color: var(--muted); }
+    .doc__body strong { font-size: 18px; }
+  }
+</style>

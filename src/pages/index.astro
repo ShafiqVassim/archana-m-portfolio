@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Splash from '../components/Splash.astro';
+import Nav from '../components/sections/Nav.astro';
+import Hero from '../components/sections/Hero.astro';
+import Ticker from '../components/sections/Ticker.astro';
+import Statement from '../components/sections/Statement.astro';
+import Assets from '../components/sections/Assets.astro';
+import OffTheBooks from '../components/sections/OffTheBooks.astro';
+import Documents from '../components/sections/Documents.astro';
+import Contact from '../components/sections/Contact.astro';
+import StickyBar from '../components/sections/StickyBar.astro';
+import ContentsDialog from '../components/sections/ContentsDialog.astro';
+import { site } from '../data/site';
+---
+<Base title={`${site.name} — ${site.role} in Coimbatore`} description={site.description}>
+  <Splash />
+  <Nav />
+  <main id="main">
+    <Hero />
+    <Ticker />
+    <Statement />
+    <Assets />
+    <OffTheBooks />
+    <Documents />
+    <Contact />
+  </main>
+  <StickyBar />
+  <ContentsDialog />
+</Base>
+<script>
+  import '../scripts/main.ts';
+</script>

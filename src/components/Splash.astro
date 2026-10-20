@@ -1,0 +1,57 @@
+---
+import Sunflower from './motifs/Sunflower.astro';
+import Mandala from './motifs/Mandala.astro';
+import { site } from '../data/site';
+---
+<div class="splash" id="splash" aria-hidden="true">
+  <div class="splash__stack">
+    <div class="splash__bloom">
+      <Mandala class="splash__mandala" />
+      <Sunflower class="splash__flower" inline />
+    </div>
+    <p class="splash__name">{site.name}</p>
+    <div class="splash__progress">
+      <div class="splash__labels mono">
+        <span>Opening the books…</span><span>Crocheting petals…</span><span>Books balanced ✓</span>
+      </div>
+      <div class="splash__bar"><i></i></div>
+    </div>
+  </div>
+  <p class="splash__note">↳ please don’t audit the load time.</p>
+  <span class="splash__skip mono">Tap to skip</span>
+</div>
+
+<style>
+  .splash { display: none; }
+  :global(html.splash-on) .splash {
+    position: fixed; inset: 0; z-index: 90; display: grid; place-items: center;
+    background: var(--cream) repeating-linear-gradient(to bottom, transparent 0 31px, rgb(157 184 211 / .22) 31px 32px);
+    animation: splash-out .38s var(--ease-out) 1.02s forwards; cursor: pointer;
+  }
+  :global(html.splash-done) .splash { animation: splash-out .3s var(--ease-out) forwards; }
+  @keyframes splash-out { to { transform: translateY(-100%); visibility: hidden; } }
+  .splash__stack { display: grid; justify-items: center; gap: 14px; }
+  .splash__bloom { position: relative; width: clamp(170px, 18vw, 230px); aspect-ratio: 1; }
+  .splash__bloom :global(.splash__flower) { position: relative; width: 100%; }
+  .splash__bloom :global(.splash__mandala) { position: absolute; left: -38%; top: -38%; width: 176%; max-width: none; opacity: 0; animation: fade-to .5s ease .3s forwards; --to: .14; }
+  .splash__bloom :global(.petal) { transform-box: fill-box; transform-origin: 0% 50%; transform: scale(0); animation: petal .42s var(--ease-spring) forwards; animation-delay: calc(.28s + var(--i) * 25ms); }
+  .splash__bloom :global(.sunflower__disc) { transform-box: fill-box; transform-origin: center; animation: pop .35s var(--ease-spring) both; }
+  @keyframes petal { to { transform: scale(1); } }
+  @keyframes pop { from { transform: scale(0); } }
+  @keyframes fade-to { to { opacity: var(--to, 1); } }
+  .splash__name { font: 600 clamp(44px, 4.4vw, 64px)/1 var(--f-display); letter-spacing: -0.025em; opacity: 0; transform: translateY(10px); animation: rise .4s var(--ease-out) .72s forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .splash__progress { width: min(260px, 70vw); display: grid; gap: 10px; margin-top: 8px; }
+  .splash__labels { display: grid; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--dlav); }
+  .splash__labels span { grid-area: 1 / 1; opacity: 0; }
+  .splash__labels span:nth-child(1) { animation: label 0s .0s forwards, label-out 0s .3s forwards; }
+  .splash__labels span:nth-child(2) { animation: label 0s .3s forwards, label-out 0s .8s forwards; }
+  .splash__labels span:nth-child(3) { color: var(--henna); animation: label 0s .8s forwards; }
+  @keyframes label { to { opacity: 1; } }
+  @keyframes label-out { to { opacity: 0; } }
+  .splash__bar { height: 4px; border-radius: 2px; background: var(--line); }
+  .splash__bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--dlav); animation: fill .85s cubic-bezier(.6, .1, .3, 1) .05s forwards; }
+  @keyframes fill { 0% { width: 4%; } 40% { width: 52%; } 70% { width: 74%; } 100% { width: 100%; } }
+  .splash__note { position: absolute; bottom: calc(48px + env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; font: 400 24px/1.1 var(--f-hand); color: var(--red); opacity: 0; animation: fade-to .3s ease .8s forwards; }
+  .splash__skip { position: absolute; top: 24px; right: 24px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+</style>
