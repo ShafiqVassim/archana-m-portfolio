@@ -1,5 +1,6 @@
 ---
 import Rangoli from '../motifs/Rangoli.astro';
+import PawTrail from '../motifs/PawTrail.astro';
 import { experience } from '../../data/site';
 ---
 <section class="section" id="ledger" aria-labelledby="ledger-title">
@@ -11,13 +12,14 @@ import { experience } from '../../data/site';
       <div class="section-motif motif-rangoli" aria-hidden="true" data-scroll-spin="0.06"><Rangoli /></div>
     </div>
 
+    <div class="ledger-wrap">
     <div class="ledger" role="table" aria-label="Employment history" data-reveal>
       <div class="ledger__head" role="row">
         <span role="columnheader">Date</span><span role="columnheader">Particulars</span><span role="columnheader">Entries</span><span role="columnheader">Balance</span>
       </div>
       {experience.map((j, i) => (
         <div class="ledger__row" role="row" style={`--i:${i}`}>
-          <div class="ledger__date mono" role="cell">{j.dates[0]} —{' '}<br />{j.dates[1]}</div>
+          <div class="ledger__date mono" role="cell">{j.dates[0]} –{' '}<br />{j.dates[1]}</div>
           <div class="ledger__part" role="cell"><h3>{j.company}</h3><p>{j.role}</p></div>
           <div class="ledger__entries" role="cell"><ul>{j.entries.map((e) => <li>{e}</li>)}</ul></div>
           <div class="ledger__bal" role="cell">
@@ -27,11 +29,26 @@ import { experience } from '../../data/site';
         </div>
       ))}
     </div>
+    </div>
+    <div class="paw-row" aria-hidden="true" data-reveal>
+      <span class="note">↳ paw-reviewed by Pakkuru</span>
+      <PawTrail class="paw-row__trail" />
+    </div>
   </div>
 </section>
 
 <style>
   .motif-rangoli { width: clamp(104px, 13.9vw, 200px); top: -8px; }
+  .ledger-wrap { position: relative; }
+  .paw-row { display: flex; justify-content: flex-end; align-items: center; gap: 14px; margin-top: 12px; }
+  .paw-row .note { font-size: 22px; }
+  .paw-row :global(.trail-paw) { transition: opacity .3s; }
+  :global(html.motion-ok) .paw-row :global(.trail-paw) { opacity: 0; }
+  .paw-row:global(.is-in) :global(.trail-paw) { animation: step 4.2s ease-in-out infinite; animation-delay: calc(var(--i) * .38s); }
+  @keyframes step { 0% { opacity: 0; transform: scale(.6); } 6% { opacity: 1; transform: none; } 58% { opacity: 1; } 74%, 100% { opacity: 0; } }
+  .paw-row :global(.trail-paw) { transform-box: fill-box; transform-origin: center; }
+  .paw-row :global(.paw-row__trail) { width: 300px; }
+  @media (max-width: 860px) { .paw-row :global(.paw-row__trail) { width: 180px; } .paw-row .note { font-size: 19px; } }
   .ledger { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .ledger__head, .ledger__row { display: grid; grid-template-columns: 190fr 290fr 420fr 152fr; gap: 20px; padding: 26px 24px; }
   .ledger__head { background: var(--ink); color: var(--paper); padding-block: 18px; font: 500 12px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; }

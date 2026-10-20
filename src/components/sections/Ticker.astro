@@ -1,11 +1,11 @@
 ---
-const items = ['Tally', 'Billing & invoicing', 'GST support', 'Payroll support', 'Ledgers', 'Cash handling', 'Crochet (unbilled)'];
+const items = ['Tally', 'Billing & invoicing', 'GST support', 'Payroll support', 'Ledgers', 'Cash handling', 'Handmade flowers (unbilled)', 'Pakkuru (chief auditor)'];
 ---
 <div class="ticker on-ink" role="region" aria-label="Skills summary">
   <p class="sr-only">{items.join(', ')}</p>
   <div class="ticker__track" aria-hidden="true">
     {[0, 1].map(() => (
-      <ul>{items.map((t) => <li class={t.startsWith('Crochet') ? 'is-lav' : ''}>{t}<span>✿</span></li>)}</ul>
+      <ul>{items.map((t) => <li class={t.startsWith('Handmade') || t.startsWith('Pakkuru') ? 'is-lav' : ''}>{t}<span>✿</span></li>)}</ul>
     ))}
   </div>
 </div>

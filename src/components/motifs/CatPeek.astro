@@ -1,0 +1,18 @@
+---
+// Pakkuru / Peeking over edge (Figma). Drawn sideways: head peeks to the right, paws grip the edge on the left.
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<svg class={`cat-peek ${cls}`} viewBox="0 0 82 117" fill="none" aria-hidden="true" focusable="false">
+  <path d="M45.24 21.84L76.44 26.52L56.16 48.36Z M45.24 95.15L76.44 90.47L56.16 68.63Z" fill="#DE9A35"/>
+  <path d="M51.47 27.3L68.63 29.64L56.15 40.56Z M51.47 89.69L68.63 87.35L56.15 76.43Z" fill="#E9A3B5"/>
+  <ellipse cx="35.1" cy="58.5" rx="32" ry="39.8" fill="#DE9A35" stroke="#A8641C" stroke-width=".93" stroke-dasharray="1.56 2.34"/>
+  <path d="M57 49 L63 51 M59 58.5 L65 58.5 M57 68 L63 66" stroke="#B9701F" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M60.83 58.5L26.51 51.48V65.52Z" fill="#FFF4E0"/>
+  <ellipse cx="21.05" cy="58.5" rx="11.7" ry="19.5" fill="#FFF4E0"/>
+  <path d="M26.52 54.6V62.4L21.84 58.5Z" fill="#E9A3B5"/>
+  <g class="peek-eyes"><circle cx="37.44" cy="40.56" r="7.8" fill="#FFFDF8" stroke="#A8641C" stroke-width=".7"/><circle class="pupil" cx="35.1" cy="39.77" r="3.9" fill="#3A2717"/><circle cx="37.44" cy="76.43" r="7.8" fill="#FFFDF8" stroke="#A8641C" stroke-width=".7"/><circle class="pupil" cx="35.1" cy="75.66" r="3.9" fill="#3A2717"/></g>
+  <path d="M17.16 53.04C14.04 55.38 14.04 57.72 17.16 58.5C14.04 59.28 14.04 61.62 17.16 63.96" stroke="#3A2717" stroke-width="1.09" stroke-linecap="round"/>
+  <g class="peek-paws"><ellipse cx="6.24" cy="34.31" rx="5.85" ry="10.53" fill="#FFF4E0" stroke="#A8641C" stroke-width=".9"/><ellipse cx="6.24" cy="82.67" rx="5.85" ry="10.53" fill="#FFF4E0" stroke="#A8641C" stroke-width=".9"/>
+  <path d="M9.36 30.41H3.12M9.36 37.43H3.12M9.36 78.78H3.12M9.36 85.8H3.12" stroke="#A8641C" stroke-width=".8" stroke-linecap="round"/></g>
+</svg>

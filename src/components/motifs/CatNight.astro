@@ -1,0 +1,16 @@
+---
+// "Cat / Night watch (on ink)" (Figma v3)
+interface Props { class?: string }
+const { class: cls = '' } = Astro.props;
+---
+<svg class={`cat-night ${cls}`} viewBox="0 0 96 139" fill="none" aria-hidden="true" focusable="false">
+  <path class="night-tail" d="M56 89.6C67.2 104 49.6 118.4 62.4 134.4" stroke="#DE9A35" stroke-width="8" stroke-linecap="round"/>
+  <ellipse cx="47.9" cy="69.5" rx="30.4" ry="23.2" fill="#DE9A35"/>
+  <path d="M24 30.3L27.2 4.7L44.8 20.7Z M72 30.3L68.8 4.7L51.2 20.7Z" fill="#DE9A35"/>
+  <ellipse cx="47.9" cy="35.1" rx="27.2" ry="22.4" fill="#DE9A35"/>
+  <path d="M41 16 L43 23 M48 14 L48 22 M55 16 L53 23" stroke="#B9701F" stroke-width="2.2" stroke-linecap="round"/>
+  <ellipse cx="47.9" cy="44" rx="11" ry="7" fill="#FFF4E0"/>
+  <g class="night-eye"><ellipse cx="36.8" cy="35.1" rx="5.6" ry="6.4" fill="#3A2717"/><path d="M36.7 30.3V39.9" stroke="#F5B82E" stroke-width="2" stroke-linecap="round"/></g>
+  <g class="night-eye"><ellipse cx="59.1" cy="35.1" rx="5.6" ry="6.4" fill="#3A2717"/><path d="M59.2 30.3V39.9" stroke="#F5B82E" stroke-width="2" stroke-linecap="round"/></g>
+  <path d="M44.7 41.7H51.1L47.9 44.9Z" fill="#E9A3B5"/>
+</svg>

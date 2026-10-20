@@ -4,6 +4,7 @@ import Sunflower from '../motifs/Sunflower.astro';
 import LavenderFlower from '../motifs/LavenderFlower.astro';
 import Rangoli from '../motifs/Rangoli.astro';
 import Mandala from '../motifs/Mandala.astro';
+import CatYarn from '../motifs/CatYarn.astro';
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import { hobbies, site } from '../../data/site';
@@ -16,7 +17,7 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
       <p class="eyebrow">04 · Off the books</p>
       <h2 class="h2" id="otb-title">Off the books.</h2>
       <p class="lede">Unbilled hours. Entirely voluntary. No GST applicable.</p>
-      <p class="note otb__note">↳ yes, these are real. yes, I made them. no, I won’t stop mentioning it.</p>
+      <p class="note otb__note">↳ yes, these are real. yes, I made them (the cat is just vibing). no, I won’t stop mentioning it.</p>
       <div class="section-motif motif-bouquet" aria-hidden="true"><Bouquet /></div>
     </div>
   </div>
@@ -52,7 +53,7 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
               </svg>
             )}
           </div>
-          <h3>{h.name} <span class="mono unbilled">Unbilled</span></h3>
+          <h3>{h.name}</h3>
           <p>{h.desc}</p>
         </li>
       ))}
@@ -62,7 +63,7 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
   </div>
 
   <div class="shell">
-    <div class="player" data-player data-track-id={site.spotifyTrackId || undefined}>
+    <div class="player" data-player data-track-id={site.spotifyTrackId || undefined} data-preview={site.songPreview || undefined} data-preview-secs={site.songPreviewSeconds}>
       <button class="disc" type="button" aria-pressed="false" aria-label="Spin the record (animation only)" data-disc>
         <svg viewBox="0 0 88 88" aria-hidden="true">
           <circle cx="44" cy="44" r="44" fill="#1F2433" />
@@ -87,6 +88,7 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
       <p class="note player__note">play count: we don’t talk about it.</p>
       <div class="player__embed" data-embed hidden></div>
     </div>
+    <div class="yarn-row" aria-hidden="true"><span class="yarn" data-poke data-greet><CatYarn /><span class="pk-bubble yarn-bubble">this is work.</span></span></div>
   </div>
 </section>
 
@@ -139,10 +141,22 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
   .bar b { position: absolute; left: 0; top: 5px; height: 4px; width: 68%; border-radius: 2px; background: var(--dlav); }
   .bar b::after { content: ''; position: absolute; right: -7px; top: -5px; width: 14px; height: 14px; border-radius: 50%; background: var(--sun); border: 1.5px solid var(--ink); }
   .otb:global(.is-playing) .bar b { animation: progress 7s linear infinite; }
+  .otb:global(.is-preview) .bar b { animation: progress var(--preview, 12s) linear 1 forwards; }
   @keyframes progress { from { width: 0; } to { width: 100%; } }
   .times { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
   .play-btn__icon { color: var(--sun); font-size: 12px; }
   .player__note { font-size: 22px; }
+  .yarn-row { display: flex; justify-content: flex-end; padding-right: 60px; margin-top: 6px; margin-bottom: calc(-1 * var(--section-y) + 12px); }
+  .yarn { position: relative; width: 154px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .yarn :global(svg) { display: block; width: 100%; }
+  .yarn :global(.yarn-ball) { transform-box: fill-box; transform-origin: center; }
+  .yarn :global(.yarn-arm) { transform-box: fill-box; transform-origin: 0% 50%; }
+  :global(html.motion-ok) .yarn :global(.yarn-arm) { animation: bat 3.2s ease-in-out infinite; }
+  @keyframes bat { 0%, 70%, 100% { transform: rotate(0); } 80% { transform: rotate(-12deg); } 90% { transform: rotate(4deg); } }
+  @media (hover: hover) { .yarn:hover :global(.yarn-ball) { animation: roll .9s var(--ease-out); } }
+  .yarn:global(.is-poked) :global(.yarn-ball) { animation: roll .9s var(--ease-out); }
+  @keyframes roll { 50% { transform: translateX(14px) rotate(200deg); } }
+  .yarn-bubble { left: -10px; top: -26px; }
   .player__embed { grid-column: 1 / -1; }
   .player__embed iframe { display: block; width: 100%; height: 152px; border: 0; border-radius: 12px; }
 
@@ -166,5 +180,7 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
   @media (max-width: 860px) {
     .motif-bouquet { width: 72px; }
     .section-head { --motif-w: 72px; }
+    .yarn-row { padding-right: 10px; }
+    .yarn { width: 92px; }
   }
 </style>

@@ -1,6 +1,7 @@
 ---
 import Sunflower from '../motifs/Sunflower.astro';
 import LavenderFlower from '../motifs/LavenderFlower.astro';
+import CatPeek from '../motifs/CatPeek.astro';
 import { assets } from '../../data/site';
 ---
 <section class="section" id="assets" aria-labelledby="assets-title">
@@ -8,11 +9,12 @@ import { assets } from '../../data/site';
     <div class="section-head section-head--band">
       <p class="eyebrow">03 · Assets</p>
       <h2 class="h2" id="assets-title">Assets. (Liquid, mostly.)</h2>
-      <p class="lede">The skills, listed plainly. No progress bars — nobody can explain what 85% of Tally means.</p>
+      <p class="lede">The skills, listed plainly. No progress bars. Nobody can explain what 85% of Tally means.</p>
       <div class="section-motif motif-flowers" aria-hidden="true">
         <Sunflower class="mf-sun" /><LavenderFlower class="mf-lav" />
       </div>
     </div>
+    <div class="assets-wrap">
     <ul class="assets">
       {assets.map((a) => (
         <li class="asset">
@@ -22,6 +24,9 @@ import { assets } from '../../data/site';
         </li>
       ))}
       <li class="asset asset--liab">
+        <span class="peek peek--card" data-reveal aria-hidden="true"><span class="peek__move"><CatPeek /></span></span>
+        <span class="pk-bubble liab-bubble" aria-hidden="true">you didn’t see me.</span>
+        <span class="peek peek--list" data-poke data-greet data-greet-soft aria-hidden="true"><span class="peek__clip"><span class="peek__move"><span class="peek__rot"><CatPeek /></span></span></span><span class="pk-bubble" data-line="you didn’t see me." data-greet-line="hi.">hi.</span></span>
         <button type="button" class="liab" data-liab aria-live="polite">
           <span class="asset__code mono">L-01</span>
           <span class="liab__title">Liabilities</span>
@@ -31,6 +36,8 @@ import { assets } from '../../data/site';
         </button>
       </li>
     </ul>
+    <p class="note liab-note" aria-hidden="true">↳ the real liability <span class="liab-face"><CatPeek /></span></p>
+    </div>
   </div>
 </section>
 
@@ -52,6 +59,26 @@ import { assets } from '../../data/site';
   .asset:hover .asset__code span { transform: translateY(-100%); }
 
   .asset--liab { padding: 0; background: var(--lav); border-color: var(--lav); }
+  .assets-wrap { position: relative; }
+  .peek { position: absolute; z-index: 3; -webkit-tap-highlight-color: transparent; }
+  .peek :global(svg) { width: 100%; height: 100%; display: block; }
+  .peek__move { display: block; width: 100%; height: 100%; transition: transform .45s var(--ease-spring); }
+  /* desktop/tablet: peeks out from behind the card edge; hides while the card is hovered */
+  .peek--card { left: calc(100% - 12px); top: 34px; width: 82px; height: 117px; overflow: hidden; pointer-events: none; }
+  :global(html.motion-ok) .peek--card .peek__move { transform: translateX(-100%); }
+  :global(html.motion-ok) .peek--card:global(.is-in) .peek__move { transform: none; transition-delay: .25s; }
+  .asset--liab:hover .peek--card .peek__move { transform: translateX(-100%) !important; transition-delay: 0s !important; }
+  .liab-bubble { right: -18px; top: -34px; }
+  .asset--liab:hover .liab-bubble { opacity: 1; transform: none; }
+  .peek--list { display: none; }
+  .peek :global(.peek-eyes) { transform-box: fill-box; transform-origin: center; }
+  :global(html.motion-ok) .peek :global(.peek-eyes) { animation: peek-blink 5s infinite; }
+  @keyframes peek-blink { 0%, 92%, 100% { transform: scaleX(1); } 95% { transform: scaleX(.12); } }
+  .liab-note { text-align: right; margin-top: 10px; padding-right: 12px; font-size: 22px; }
+  .liab-face { display: inline-block; width: 22px; height: 31px; vertical-align: -9px; margin-left: 4px; transform: rotate(-90deg); }
+  .liab-face :global(svg) { width: 100%; height: 100%; display: block; }
+  :global(html.motion-ok) .liab-face { animation: face-bob 2.4s ease-in-out infinite; }
+  @keyframes face-bob { 50% { transform: rotate(-90deg) translateX(3px); } }
   .liab { display: grid; align-content: start; gap: 12px; width: 100%; height: 100%; padding: 26px; text-align: left; border-radius: inherit; }
   .liab .asset__code { color: var(--ink); }
   .liab__title { font: 600 22px/1.2 var(--f-display); letter-spacing: -0.01em; }
@@ -65,6 +92,19 @@ import { assets } from '../../data/site';
   @media (max-width: 860px) { .motif-flowers { width: 88px; } .section-head { --motif-w: 88px; } }
   @media (max-width: 640px) {
     .asset--liab { display: block; padding: 0; }
+    .peek--card { display: none; }
+    .liab-note { margin-top: 8px; padding-right: 4px; font-size: 20px; }
+    .asset--liab { overflow: visible; }
+    .assets { overflow: visible; }
+    .assets > .asset:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .asset--liab, .asset--liab .liab { border-radius: 0 0 var(--radius) var(--radius); }
+    .peek--list { display: block; right: 14px; top: -44px; width: 66px; height: 46px; cursor: pointer; }
+    .peek__clip { position: absolute; inset: 0; overflow: hidden; }
+    .peek__rot { position: absolute; left: 11px; top: -9px; width: 44px; height: 63px; transform: rotate(-90deg); }
+    :global(html.motion-ok) .peek--list .peek__move { transform: translateY(105%); }
+    :global(html.motion-ok) .peek--list:global(.is-talking) .peek__move, :global(html.motion-ok) .peek--list:global(.is-seen) .peek__move { transform: none; }
+    .peek--list:global(.is-poked) .peek__move { transform: translateY(105%) !important; transition-duration: .25s; }
+    .peek--list .pk-bubble { right: 4px; top: 54px; transform-origin: 80% 0%; }
     .assets { grid-template-columns: 1fr; gap: 0; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
     .asset { grid-template-columns: 48px 1fr; gap: 3px 12px; padding: 16px 18px; border: 0; border-radius: 0; }
     .asset + .asset { border-top: 1px solid var(--line); }

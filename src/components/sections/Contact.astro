@@ -1,5 +1,6 @@
 ---
 import Mandala from '../motifs/Mandala.astro';
+import CatNight from '../motifs/CatNight.astro';
 import { site } from '../../data/site';
 ---
 <section class="contact on-ink" id="contact" aria-labelledby="contact-title">
@@ -21,9 +22,10 @@ import { site } from '../../data/site';
       <span class="mono total__k">Closing balance</span>
       <span class="total__dots" aria-hidden="true"></span>
       <span class="mono total__v">1 good hire</span>
+      <span class="night" data-poke data-greet aria-hidden="true"><CatNight /><span class="pk-bubble night-bubble">still watching. hire her.</span></span>
     </div>
     <footer class="foot mono">
-      <span>© {new Date().getFullYear()} {site.name} · Balanced since 2022</span>
+      <span>© {new Date().getFullYear()} {site.name} · Balanced since 2022 · Pakkuru-approved</span>
       <a href="#top" data-scroll>Back to opening balance ↑</a>
     </footer>
   </div>
@@ -42,9 +44,20 @@ import { site } from '../../data/site';
   .details a:hover { text-decoration-color: var(--sun); }
   .ext { font-family: var(--f-body); }
   .contact__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; }
-  .total { display: flex; align-items: center; gap: 16px; margin-top: 56px; padding: 24px 0; border-block: 1px dashed rgb(255 253 248 / .3); }
+  .total { position: relative; display: flex; align-items: center; gap: 16px; margin-top: 56px; padding: 24px 0; border-block: 1px dashed rgb(255 253 248 / .3); }
   .total__k, .total__v { font-size: 15px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
   .total__v { color: var(--sun); }
+  .night { position: absolute; left: 66%; top: -91px; width: 96px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .night :global(svg) { display: block; width: 100%; }
+  .night-bubble { left: 70%; top: -26px; }
+  .night :global(.night-eye) { transform-box: fill-box; transform-origin: center; transition: transform .3s var(--ease-spring); }
+  :global(html.motion-ok) .night :global(.night-eye) { animation: nblink 6s infinite; }
+  @keyframes nblink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+  .night :global(.night-tail) { transform-box: fill-box; transform-origin: 0% 0%; }
+  :global(html.motion-ok) .night :global(.night-tail) { animation: nsway 4s ease-in-out infinite; }
+  @keyframes nsway { 50% { transform: rotate(7deg); } }
+  @media (hover: hover) { .night:hover :global(.night-eye) { animation: none; transform: scale(1.25); } }
+  .night:global(.is-poked) :global(.night-eye) { animation: none; transform: scale(1.25); }
   .total__dots { flex: 1; height: 2px; background: radial-gradient(circle, rgb(255 253 248 / .45) 1px, transparent 1.5px) 0 50% / 8px 2px repeat-x; transform-origin: left; }
   :global(html.motion-ok) .total__dots { transform: scaleX(0); }
   :global(html.motion-ok) .total__v { opacity: 0; }
@@ -60,6 +73,9 @@ import { site } from '../../data/site';
     .details a[data-email] { font-size: clamp(16px, 4.9vw, 19px); }
     .contact__ctas .btn { flex: 1 1 100%; }
     .total__k, .total__v { font-size: 12px; }
+    .total { margin-top: 104px; }
+    .night { left: calc(50% - 36px); top: -68px; width: 72px; }
+    .night-bubble { left: 50%; translate: -50% 0; top: -34px; font-size: 17px; transform-origin: 50% 100%; }
     .contact { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
   }
 </style>

@@ -1,5 +1,6 @@
 ---
 import MehndiVine from '../motifs/MehndiVine.astro';
+import CatLoaf from '../motifs/CatLoaf.astro';
 import { education, certifications, languages } from '../../data/site';
 const cards = [
   { title: 'Education', items: education },
@@ -11,12 +12,13 @@ const cards = [
     <div class="section-head">
       <p class="eyebrow">05 · Supporting documents</p>
       <h2 class="h2" id="docs-title">The audit trail.</h2>
-      <p class="lede">Education and certifications. Filed, dated, and available on request — like everything else.</p>
+      <p class="lede">Education and certifications. Filed, dated, and available on request, like everything else.</p>
       <div class="section-motif motif-vine" aria-hidden="true" data-reveal><MehndiVine /></div>
     </div>
     <div class="docs">
       {cards.map((c) => (
         <article class="doc">
+          {c.title === 'Education' && (<><span class="loaf" data-poke data-greet aria-hidden="true"><CatLoaf /><span class="pk-bubble loaf-bubble">do not disturb.</span></span><span class="note loaf-note" aria-hidden="true">↳ Pakkuru, filed under: naps</span></>)}
           <h3 class="doc__title mono">{c.title}</h3>
           <ul>
             {c.items.map((it) => (
@@ -46,7 +48,23 @@ const cards = [
   @keyframes draw { to { stroke-dashoffset: 0; } }
   @keyframes leaf { from { opacity: 0; transform: scale(.2); } to { opacity: 1; transform: none; } }
 
-  .docs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .docs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+  .doc { position: relative; }
+  .loaf { position: absolute; right: 28px; bottom: calc(100% - 16px); width: 128px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .loaf :global(svg) { display: block; width: 100%; }
+  .loaf-bubble { right: 6px; top: -30px; }
+  .loaf-note { position: absolute; right: 168px; top: -38px; font-size: 22px; white-space: nowrap; }
+  .loaf :global(.loaf-z path) { transform-box: fill-box; transform-origin: center; }
+  :global(html.motion-ok) .loaf :global(.loaf-z path) { animation: zfloat 2.8s ease-in-out infinite; }
+  .loaf :global(.loaf-z .z2) { animation-delay: .35s !important; } .loaf :global(.loaf-z .z3) { animation-delay: .7s !important; }
+  @keyframes zfloat { 50% { transform: translateY(-3px); opacity: .45; } }
+  .loaf :global(.loaf-body) { transform-box: fill-box; transform-origin: 50% 100%; }
+  :global(html.motion-ok) .loaf :global(.loaf-body) { animation: snooze 3.6s ease-in-out infinite; }
+  @keyframes snooze { 50% { transform: scaleY(1.04); } }
+  .loaf :global(.loaf-tail) { transform-box: fill-box; transform-origin: 100% 50%; }
+  @media (hover: hover) { .loaf:hover :global(.loaf-tail) { animation: tflick .5s ease-in-out 2 alternate; } }
+  .loaf:global(.is-poked) :global(.loaf-tail) { animation: tflick .5s ease-in-out 2 alternate; }
+  @keyframes tflick { to { transform: rotate(10deg); } }
   .doc { padding: 28px 32px 12px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); }
   .doc__title { font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
   .doc li { display: grid; grid-template-columns: 120px 1fr; gap: 20px; padding: 20px 0; border-bottom: 1px dashed var(--line); }
@@ -64,6 +82,8 @@ const cards = [
     .section-head { padding-bottom: 64px; }
     .motif-vine { width: 240px; left: 0; right: auto; bottom: 0; }
     .doc { padding: 22px 22px 6px; }
+    .loaf { right: 11px; bottom: calc(100% - 12px); width: 94px; }
+    .loaf-note { right: 112px; top: -30px; font-size: 19px; }
     .doc li { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
     .doc__when { font-size: 11px; color: var(--muted); }
     .doc__body strong { font-size: 18px; }

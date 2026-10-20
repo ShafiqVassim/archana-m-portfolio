@@ -12,13 +12,17 @@ export const site = {
   spotify: 'https://open.spotify.com/search/Veesum%20Velichathile',
   // Paste the ID from the song link (open.spotify.com/track/<THIS PART>) to play the song on the page itself.
   spotifyTrackId: '',
+  // Optional: a short preview clip you have the rights to, placed in /public (e.g. '/audio/preview.mp3').
+  // When set, tapping the record plays it for songPreviewSeconds, then points to Spotify for the rest.
+  songPreview: '',
+  songPreviewSeconds: 12,
   song: { title: 'Veesum Velichathile', film: 'Naan Ee', year: 2012, language: 'Tamil' },
   // Set to false once real photos replace the illustrations.
   showPlaceholderTags: false,
   // Drop a photo in /public (e.g. '/archana.jpg') and set it here; the hero card then shows the photo.
   portrait: '',
   description:
-    'Archana Manikandan — accountant in Coimbatore with 3+ years in billing, cash handling, ledgers and payroll support. Tally-fluent, GST-literate. Also crochets sunflowers.',
+    'Archana Manikandan, accountant in Coimbatore with 3+ years in billing, cash handling, ledgers and payroll support. Tally-fluent, GST-literate. Also crochets sunflowers.',
 };
 
 export const nav = [
@@ -73,11 +77,11 @@ export const assets = [
 ];
 
 export const hobbies = [
-  { key: 'crochet', name: 'Crochet flowers', photo: true, pos: '50% 38%', alt: 'Handmade bouquet of orange and yellow sunflowers with lavender sprigs', desc: 'Yes, I made these. No, they don’t need watering. Inventory: growing. Storage: not.' },
-  { key: 'drawing', name: 'Drawing', photo: true, pos: '50% 50%', alt: 'Watercolour drawing of a baby elephant among red tulips and butterflies', desc: 'Yes, I drew this. The elephant cooperated more than most ledgers do.' },
-  { key: 'music', name: 'Music', photo: false, pos: '', alt: '', desc: 'Currently on loop: Veesum Velichathile from Naan Ee. Yes, the housefly film. Skip button: decorative.' },
-  { key: 'mehndi', name: 'Mehndi (a little)', photo: true, pos: '50% 42%', alt: 'Floral mehndi design on the palm of a hand', desc: 'Yes, that’s my mehndi. Steady hands, clean lines — same standard as my ledgers.' },
-  { key: 'rangoli', name: 'Rangoli', photo: true, pos: '50% 55%', alt: 'Circular flower-petal rangoli in yellow, orange, maroon and green', desc: 'Yes, I made this. Every petal placed, every petal accounted for.' },
+  { key: 'crochet', name: 'Handmade flowers', photo: true, pos: '50% 50%', alt: 'Handmade bouquet of orange and yellow sunflowers with lavender sprigs', desc: 'Yes, I made these. They never wilt. Storage is another story.' },
+  { key: 'drawing', name: 'Drawing', photo: true, pos: '50% 45%', alt: 'Coloured-pencil drawing of a sleeping white bunny curled up on autumn leaves', desc: 'Yes, I drew this. The bunny sat still. Ledgers rarely do.' },
+  { key: 'music', name: 'Music', photo: true, pos: '50% 50%', alt: 'Black-and-white cat wearing white headphones by the sea', desc: 'On loop: Veesum Velichathile, Naan Ee. Yes, the housefly film.' },
+  { key: 'mehndi', name: 'Mehndi (a little)', photo: true, pos: '50% 42%', alt: 'Floral mehndi design on the palm of a hand', desc: 'Yes, that’s my mehndi. Steady hands, clean lines, like my ledgers.' },
+  { key: 'rangoli', name: 'Rangoli', photo: true, pos: '50% 50%', alt: 'Circular flower-petal rangoli with a pinwheel centre in maroon, white, yellow, orange and purple', desc: 'Yes, I made this. Every petal accounted for.' },
 ];
 
 export const education = [

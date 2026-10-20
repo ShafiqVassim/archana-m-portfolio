@@ -25,7 +25,7 @@ education and languages. Change it there, not in the components.
 | To change… | Edit |
 |---|---|
 | Spotify button link | `site.spotify` — use the song's own link (Spotify → Share → Copy song link) |
-| Play the song on the page | `site.spotifyTrackId` — the ID from that link (`open.spotify.com/track/<ID>`). The record then loads Spotify's player in place, only when tapped |
+| Play the song on the page (Spotify preview, full song on Spotify) | `site.spotifyTrackId` — the ID from that link (`open.spotify.com/track/<ID>`). The record then loads Spotify's player in place, only when tapped |
 | Hero photo | put it in `public/` and set `site.portrait` (e.g. `'/archana.jpg'`) |
 | Résumé download | replace `public/archana-m-resume.pdf` (keep the file name) |
 | “Placeholder” tags on hobby cards | `site.showPlaceholderTags = false` |
@@ -74,8 +74,14 @@ vercel.json                 ← long-cache headers for fonts/assets + basic secu
 ```
 
 **Motion principles:** one orchestrated moment (the splash bloom landing in the hero); everything else responds to a
-scroll or a tap. In the hero, the flowers, photo card, receipt and sticker can be rearranged: drag with a mouse, or press & hold then
-drag on touch screens (a quick swipe still scrolls). “Tidy up ↺” resets them. Only `transform` and `opacity` are animated. Smooth scrolling (Lenis) runs on desktop only and
+scroll or a tap. In the hero, the flowers, photo card, receipt, sticker and the crochet cat can be rearranged: drag with a mouse, or
+press & hold then drag on touch screens (a quick swipe still scrolls). “Tidy up ↺” only appears once something has
+moved, and resets everything. The cat reacts: purrs on hover/tap, “mrrp?!” while carried, “rude.” when dropped, and
+“audited ✓” (plus a stamp) when dropped on the receipt. Pakkuru, the golden crochet cat and chief auditor, appears once per section (Figma v3 + Pakkuru plan): a story line in the hero he peeks over (“hi. i audit.”), paw prints that walk step by step under the ledger
+(“paw-reviewed by Pakkuru”),
+a peek from the Liabilities card that hides while you hover it (“you didn’t see me.”), a cat batting a yarn ball under the player, a sleeping loaf
+on the Education card (“filed under: naps”) and a night-watch cat on the closing balance. Each reacts to hover/tap with a
+short line; on phones each one greets as it scrolls into view. Only the hero Pakkuru is draggable. A mini cat also sits on the mobile sticky bar. Only `transform` and `opacity` are animated. Smooth scrolling (Lenis) runs on desktop only and
 starts on the first wheel/key press. Phones keep native scrolling. Anyone with *reduce motion* switched on gets no
 splash and no animation.
 
@@ -101,3 +107,13 @@ Layout checked at 1440, 1024, 768, 390 and 360px wide (no horizontal overflow).
 - [ ] Update the résumé PDF. The current one still says “Archana PM” and **includes her phone number**.
 - [ ] Hobby photos are in `src/assets/hobbies/` — make sure every one is Archana’s own work before going live (the cards say “Yes, I made this”).
 - [ ] Hero portrait: add a photo via `site.portrait` when ready.
+
+## Music
+
+Three options, in order of preference:
+
+1. **Spotify embed** — set `site.spotifyTrackId`. Spotify's own player loads in place when the record is tapped.
+2. **Local preview** — set `site.songPreview` to a clip in `public/` (e.g. `'/audio/preview.mp3'`) and
+   `site.songPreviewSeconds` (default 12). Tapping the record plays it, the progress bar follows it, it fades out and
+   points to Spotify. Only use audio you have the rights to publish; no audio file is included in this project.
+3. Neither set — the record just spins (animation only).

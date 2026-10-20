@@ -1,0 +1,7 @@
+---
+interface Props { class?: string; style?: string }
+const { class: cls = '', style } = Astro.props;
+---
+<svg class={`paw ${cls}`} style={style} viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor">
+  <ellipse cx="12" cy="16" rx="5" ry="4.2" /><circle cx="6.4" cy="9.6" r="2.2" /><circle cx="9.9" cy="6.4" r="2.2" /><circle cx="14.1" cy="6.4" r="2.2" /><circle cx="17.6" cy="9.6" r="2.2" />
+</svg>
