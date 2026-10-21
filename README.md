@@ -74,9 +74,8 @@ vercel.json                 ← long-cache headers for fonts/assets + basic secu
 ```
 
 **Motion principles:** one orchestrated moment (the splash bloom landing in the hero); everything else responds to a
-scroll or a tap. In the hero, the flowers, photo card, receipt, sticker and the crochet cat can be rearranged: drag with a mouse, or
-press & hold then drag on touch screens (a quick swipe still scrolls). “Tidy up ↺” only appears once something has
-moved, and resets everything. The cat reacts: purrs on hover/tap, “mrrp?!” while carried, “rude.” when dropped, and
+scroll or a tap. In the hero, the flowers, photo card, receipt, sticker and the crochet cat can be rearranged: drag with a mouse or a finger. The hint and “Tidy up ↺” only appear while something is being moved or is out of place
+(and the hint on hover over a piece on desktop). The cat reacts: purrs on hover/tap, “mrrp?!” while carried, “rude.” when dropped, and
 “audited ✓” (plus a stamp) when dropped on the receipt. Pakkuru, the golden crochet cat and chief auditor, appears once per section (Figma v3 + Pakkuru plan): a story line in the hero he peeks over (“hi. i audit.”), paw prints that walk step by step under the ledger
 (“paw-reviewed by Pakkuru”),
 a peek from the Liabilities card that hides while you hover it (“you didn’t see me.”), a cat batting a yarn ball under the player, a sleeping loaf
@@ -117,3 +116,20 @@ Three options, in order of preference:
    `site.songPreviewSeconds` (default 12). Tapping the record plays it, the progress bar follows it, it fades out and
    points to Spotify. Only use audio you have the rights to publish; no audio file is included in this project.
 3. Neither set — the record just spins (animation only).
+
+## Résumé
+
+`public/archana-m-resume.pdf` is the latest résumé exported from the Figma frame “Archana-M-Resume” (Portfolio and email
+links in the header, no phone number). Re-export from Figma and replace this file to update it.
+
+## Song
+
+`public/audio/veesum-velichathile-archana.mp3` is Archana’s own recording (19 s). Tapping the record plays it in full
+(`site.songPreviewSeconds: 0`). To swap it, replace the file or point `site.songPreview` at another clip.
+
+## Pakkuru follows the cursor (desktop)
+
+`src/components/Follower.astro` + `src/scripts/follow.ts`. Outside the hero, a small Pakkuru trails the pointer: follows,
+sits after 1 s, naps after 8 s, tilts his head over links and buttons, hops on click. Native cursor is never replaced and
+clicks pass through him. Off on touch screens and with reduced motion; the footer switch “Pakkuru: following / staying” is
+remembered per browser. Spec: Figma node 187:3442.

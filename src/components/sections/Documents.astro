@@ -9,15 +9,15 @@ const cards = [
 ---
 <section class="section" id="documents" aria-labelledby="docs-title">
   <div class="shell">
-    <div class="section-head">
-      <p class="eyebrow">05 · Supporting documents</p>
+    <div class="section-head" data-anim>
+      <p class="eyebrow"><span class="folio">Fol. 05</span>Vouchers on file</p>
       <h2 class="h2" id="docs-title">The audit trail.</h2>
       <p class="lede">Education and certifications. Filed, dated, and available on request, like everything else.</p>
       <div class="section-motif motif-vine" aria-hidden="true" data-reveal><MehndiVine /></div>
     </div>
     <div class="docs">
-      {cards.map((c) => (
-        <article class="doc">
+      {cards.map((c, i) => (
+        <article class="doc" data-anim style={`--d:${(i * 0.1).toFixed(2)}s`}>
           {c.title === 'Education' && (<><span class="loaf" data-poke data-greet aria-hidden="true"><CatLoaf /><span class="pk-bubble loaf-bubble">do not disturb.</span></span><span class="note loaf-note" aria-hidden="true">↳ Pakkuru, filed under: naps</span></>)}
           <h3 class="doc__title mono">{c.title}</h3>
           <ul>
@@ -28,7 +28,7 @@ const cards = [
         </article>
       ))}
     </div>
-    <div class="langs">
+    <div class="langs" data-anim>
       <span class="eyebrow langs__k">Languages</span>
       {languages.map((l) => <span class="chip">{l}</span>)}
       <span class="note">also fluent: spreadsheet &amp; sarcasm</span>
@@ -84,7 +84,9 @@ const cards = [
     .doc { padding: 22px 22px 6px; }
     .loaf { right: 11px; bottom: calc(100% - 12px); width: 94px; }
     .loaf-note { right: 112px; top: -30px; font-size: 19px; }
-    .doc li { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
+    .doc li { grid-template-columns: 1fr; gap: 5px; padding: 16px 0; }
+    .docs { gap: 28px; }
+    .langs { margin-top: 32px; }
     .doc__when { font-size: 11px; color: var(--muted); }
     .doc__body strong { font-size: 18px; }
   }

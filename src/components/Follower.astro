@@ -1,0 +1,30 @@
+---
+// Pakkuru in third person: follows the pointer outside the hero (desktop only). Spec: Figma 187:3442.
+import CatNight from './motifs/CatNight.astro';
+import CatLoaf from './motifs/CatLoaf.astro';
+---
+<div class="pk-follow" aria-hidden="true" data-follow data-state="sit">
+  <span class="pk-follow__flip">
+    <span class="pk-follow__sit"><CatNight /></span>
+    <span class="pk-follow__nap"><CatLoaf /></span>
+  </span>
+</div>
+
+<style>
+  .pk-follow { position: fixed; left: 0; top: 0; z-index: 70; width: 34px; height: 49px; pointer-events: none; opacity: 0; transition: opacity .35s ease; will-change: transform; }
+  .pk-follow:global(.is-on) { opacity: 1; }
+  .pk-follow__flip { position: absolute; inset: 0; transition: transform .25s var(--ease-out); }
+  .pk-follow:global(.is-left) .pk-follow__flip { transform: scaleX(-1); }
+  .pk-follow__sit, .pk-follow__nap { position: absolute; left: 0; bottom: 0; transition: opacity .3s, transform .35s var(--ease-spring); }
+  .pk-follow__sit { width: 34px; height: 49px; transform-origin: 50% 100%; }
+  .pk-follow__nap { width: 52px; height: 32px; left: -8px; opacity: 0; transform: scale(.8); transform-origin: 50% 100%; }
+  .pk-follow :global(svg) { width: 100%; height: 100%; display: block; filter: drop-shadow(0 2px 2px rgb(31 36 51 / .18)); }
+  /* states */
+  .pk-follow[data-state='follow'] .pk-follow__sit { animation: pk-trot .32s ease-in-out infinite alternate; }
+  .pk-follow[data-state='curious'] .pk-follow__sit { transform: rotate(-12deg) translateY(-2px); }
+  .pk-follow[data-state='pounce'] .pk-follow__sit { transform: translateY(-9px) scale(1.12); transition-duration: .15s; }
+  .pk-follow[data-state='nap'] .pk-follow__sit { opacity: 0; transform: scale(.7); }
+  .pk-follow[data-state='nap'] .pk-follow__nap { opacity: 1; transform: none; }
+  @keyframes pk-trot { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-4px) rotate(3deg); } }
+  @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) { .pk-follow { display: none; } }
+</style>

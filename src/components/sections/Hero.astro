@@ -9,22 +9,18 @@ import { site } from '../../data/site';
 <section class="hero" id="top">
   <div class="shell hero__grid">
     <div class="hero__copy">
-      <p class="eyebrow">01 · Opening balance</p>
+      <p class="eyebrow"><span class="folio">Fol. 01</span>Opening balance</p>
       <h1 class="hero__title">
-        <span class="line"><span>I <em class="t-red">balance</em> books.</span></span>
-        <span class="line"><span>Then I crochet <em class="t-lav">flowers</em> nobody asked for.</span></span>
+        <span class="line"><span>I <em class="t-red balance">balance<span class="beam" aria-hidden="true"></span></em> books.</span></span>
+        <span class="line"><span>My cat <em class="t-lav pk-name" data-poke data-greet>Pakkuru<span class="story-peek" aria-hidden="true"><span class="story-peek__move"><span class="story-peek__rot"><CatPeek /></span></span></span><span class="pk-bubble story-bubble" aria-hidden="true">chief auditor. hi.</span></em> sits on them<span class="paw-stop" title="signed, Pakkuru"><span class="sr-only">.</span><svg class="paw paw--1" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="16" rx="5" ry="4.2"/><circle cx="6.4" cy="9.6" r="2.2"/><circle cx="9.9" cy="6.4" r="2.2"/><circle cx="14.1" cy="6.4" r="2.2"/><circle cx="17.6" cy="9.6" r="2.2"/></svg><svg class="paw paw--2" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="16" rx="5" ry="4.2"/><circle cx="6.4" cy="9.6" r="2.2"/><circle cx="9.9" cy="6.4" r="2.2"/><circle cx="14.1" cy="6.4" r="2.2"/><circle cx="17.6" cy="9.6" r="2.2"/></svg></span></span></span>
       </h1>
+      <p class="note hero__aside" aria-hidden="true">↳ he calls it auditing.</p>
       <p class="hero__lede">Accountant in Coimbatore with 3+ years of making billing, cash, ledgers and payroll add up. Tally-fluent, GST-literate, and personally offended by an unreconciled ledger.</p>
-      <p class="hero__story" data-poke data-greet>
-        <span class="story-peek" aria-hidden="true"><span class="story-peek__move"><span class="story-peek__rot"><CatPeek /></span></span></span>
-        <span class="pk-bubble story-bubble" aria-hidden="true">hi. i audit.</span>
-        Also a cat person. Meet <strong>Pakkuru</strong>, chief auditor. Nothing gets filed without his paw.
-      </p>
       <div class="hero__ctas" id="hero-ctas">
         <a class="btn" href="#ledger" data-scroll data-magnetic><span class="btn__label">See the ledger</span></a>
-        <a class="btn btn--ghost" href={site.resume} download="Archana-M-Resume.pdf" data-stamp><span class="btn__label">Download résumé</span><span class="btn__stamp" aria-hidden="true">Approved</span></a>
+        <a class="btn btn--ghost" href={site.resume} download="Archana-M-Resume.pdf" data-stamp><span class="btn__label">Download resume</span><span class="btn__stamp" aria-hidden="true">Approved</span></a>
       </div>
-      <p class="note hero__note">↳ fully audited. by me. twice.</p>
+      <p class="note hero__note">↳ fully audited. by me, twice. Pakkuru supervised.</p>
     </div>
 
     <div class="collage" data-parallax>
@@ -35,7 +31,7 @@ import { site } from '../../data/site';
         ) : (
           <div class="portrait">
             <span class="portrait__label mono">Photo of Archana</span>
-            <span class="portrait__hand">ideally holding a calculator in one hand and a crochet flower in the other</span>
+            <span class="portrait__hand"><span class="cap-long">calculator in one hand, handmade flower in the other. </span><span class="cap-miss"><span class="cap-red">photo missing:</span> Pakkuru got into every shot.</span></span>
           </div>
         )}
       </div>
@@ -64,7 +60,7 @@ import { site } from '../../data/site';
       </div>
     </div>
     <div class="drag-ui drag-ui--m">
-      <span class="drag-hint" aria-hidden="true">↳ hold & drag then rearrange. Pakkuru will complain.</span>
+      <span class="drag-hint" aria-hidden="true">↳ go on, rearrange my desk. Pakkuru will complain.</span>
       <button class="tidy" type="button" data-tidy>Tidy up ↺</button>
     </div>
   </div>
@@ -76,26 +72,57 @@ import { site } from '../../data/site';
   .hero__title { margin-top: 22px; font: 400 clamp(46px, 5.84vw, 84px)/0.98 var(--f-display); letter-spacing: -0.035em; max-width: 9.6em; }
   .hero__title em { font-style: italic; }
   .t-red { color: var(--red); } .t-lav { color: var(--dlav); }
-  .line { display: block; overflow: clip; padding-bottom: .08em; margin-bottom: -.08em; }
+  .line { display: block; overflow: visible; padding-bottom: .16em; margin-bottom: -.16em; }
+  :global(html.motion-ok:not(.splash-on)) .line:not(:global(.done)) { overflow: clip; }
+  .balance { position: relative; display: inline-block; }
+  .beam { position: absolute; left: 6%; right: 6%; bottom: -.02em; height: .045em; min-height: 3px; border-radius: 3px; background: var(--red); transform-origin: 50% 50%; }
+  .beam::after { content: ''; position: absolute; left: 50%; top: 100%; width: .16em; height: .1em; translate: -50% 0; background: var(--red); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  :global(html.motion-ok) .beam { animation: weigh 1.8s var(--ease-out) calc(var(--intro, .15s) + .5s) both; }
+  .balance { transform-origin: 50% 92%; }
+  :global(html.motion-ok) .balance { animation: rock 5.5s ease-in-out calc(var(--intro, .15s) + 2.3s) infinite; }
+  @keyframes rock { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-2.2deg); } 75% { transform: rotate(2.2deg); } }
+  .balance:hover .beam { animation: weigh 1.4s var(--ease-out) both; }
+  @keyframes weigh { 0% { transform: rotate(-7deg); } 30% { transform: rotate(5deg); } 55% { transform: rotate(-2.5deg); } 78% { transform: rotate(1deg); } 100% { transform: rotate(0); } }
+  /* full stop = two golden paw prints that step in, like the paw trail below */
+  .paw-stop { font-size: max(1em, 62px); position: relative; display: inline-block; width: .6em; height: .5em; margin-left: .03em; vertical-align: 0; color: #DE9A35; }
+  .paw { position: absolute; width: .3em; height: .3em; fill: currentColor; }
+  .paw--1 { left: 0; bottom: -.02em; transform: rotate(-24deg); }
+  .paw--2 { left: .29em; bottom: .17em; transform: rotate(-6deg); }
+  :global(html.motion-ok) .paw { opacity: 0; animation: paw-step 6s var(--ease-out) infinite; }
+  :global(html.motion-ok) .paw--1 { animation-delay: calc(var(--intro, .15s) + 1.1s); }
+  :global(html.motion-ok) .paw--2 { animation-delay: calc(var(--intro, .15s) + 1.5s); }
+  @keyframes paw-step { 0% { opacity: 0; scale: 1.5; } 5% { opacity: 1; scale: .92; } 9%, 74% { opacity: 1; scale: 1; } 86%, 100% { opacity: 0; scale: 1; } }
+  @keyframes paw-stamp-unused { 0% { opacity: 0; transform: rotate(-30deg) scale(2.2); } 60% { opacity: 1; transform: rotate(-8deg) scale(.9); } 100% { transform: rotate(-12deg) scale(1); } }
+  .keep { white-space: nowrap; }
+  .o-flower { display: inline-block; width: .6em; height: .6em; margin: 0 -.05em 0 0; vertical-align: -.06em; }
+  .o-flower svg { width: 100%; height: 100%; display: block; }
+  :global(html.motion-ok) .o-flower svg { animation: bloom-o 1.2s var(--ease-spring) calc(var(--intro, .15s) + .3s) both; }
+  .hero__title:hover .o-flower svg { animation: spin-o 1.2s var(--ease-out); }
+  @keyframes bloom-o { from { transform: scale(0) rotate(-120deg); } }
+  @keyframes spin-o { to { transform: rotate(360deg); } }
   .line > span { display: block; }
   .hero__lede { margin-top: 26px; max-width: 32em; color: var(--muted); font-size: clamp(17px, 1.4vw, 20px); }
-  .hero__story { position: relative; margin-top: 30px; max-width: 32em; padding-top: 14px; border-top: 1.5px dashed var(--line); color: var(--muted); font-size: clamp(16px, 1.3vw, 18px); cursor: default; }
-  .hero__story strong { color: var(--ink); font-weight: 600; }
-  .story-peek { position: absolute; right: 12%; bottom: calc(100% - 4px); width: 66px; height: 50px; overflow: hidden; pointer-events: auto; cursor: pointer; }
+  .pk-name { position: relative; z-index: 3; display: inline-block; cursor: pointer; }
+  .story-peek { font-size: max(1em, 64px); position: absolute; left: calc(50% - .4em); bottom: calc(100% - .12em); width: .8em; height: .6em; overflow: hidden; pointer-events: none; }
   .story-peek__move { position: absolute; inset: 0; transform: translateY(0); }
-  .story-peek__rot { position: absolute; left: 11px; top: -8px; width: 44px; height: 63px; transform: rotate(-90deg); }
+  .story-peek__rot { position: absolute; left: .13em; top: -.1em; width: .54em; height: .77em; transform: rotate(-90deg); }
+  .story-peek__move { transform: translateY(125%); transition: transform .45s var(--ease-spring); }
+  .story-peek, .story-bubble { z-index: 4; }
+  .line:has(.pk-name) { position: relative; z-index: 2; }
+  .hero__aside { margin-top: 2px; font-size: clamp(20px, 1.8vw, 24px); }
+  @media (max-width: 1100px) { .hero__aside { margin-top: -16px; } }
   .story-peek__rot :global(svg) { width: 100%; height: 100%; display: block; }
-  :global(html.motion-ok) .story-peek__move { animation: seek 7s var(--ease-out) infinite; }
-  @keyframes seek { 0%, 6% { transform: translateY(105%); } 14% { transform: translateY(0); } 30% { transform: translateY(0) rotate(-7deg); } 44% { transform: translateY(0) rotate(6deg); } 58%, 66% { transform: translateY(0); } 76%, 100% { transform: translateY(105%); } }
-  .hero__story:hover .story-peek__move, .hero__story:global(.is-talking) .story-peek__move { animation: none; transform: none; }
-  .story-bubble { right: calc(12% + 52px); bottom: calc(100% + 28px); }
+  .pk-name:hover .story-peek__move, .pk-name:global(.is-talking) .story-peek__move { animation: none; transform: none; }
+  @media (hover: hover) { .pk-name:hover .story-bubble { opacity: 1; transform: none; } }
+  .story-bubble { font-size: 19px; letter-spacing: normal; font-style: normal; left: calc(50% + 34px); bottom: calc(100% + 10px); transform-origin: 0% 100%; }
+  @media (max-width: 860px) { .story-bubble { font-size: 16px; left: auto; right: calc(50% + 30px); bottom: calc(100% + 8px); top: auto; transform-origin: 100% 100%; } .hero__title { margin-bottom: 0; } }
   .hero__ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
   .hero__note { margin-top: 26px; }
 
   /* Collage — positions mirror the Figma frame (400×600) */
   .collage { position: relative; width: 100%; max-width: 400px; aspect-ratio: 400 / 600; justify-self: end; --mx: 0; --my: 0; }
   .c { position: absolute; transform: translate3d(calc(var(--mx) * var(--depth) * 1px + var(--dx, 0px)), calc(var(--my) * var(--depth) * 1px + var(--dy, 0px)), 0) rotate(var(--rot, 0deg)); transition: transform .6s var(--ease-out); }
-  .c { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .c { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: none; }
   .c.is-pressing { scale: 1.04; transition: transform .6s var(--ease-out), scale .28s var(--ease-out); }
   .c.is-dragging { cursor: grabbing; transition: none; scale: 1.04; --rot: var(--drag-rot, 0deg); filter: drop-shadow(0 18px 22px rgb(31 36 51 / .18)); }
   @media (pointer: fine) { .c { cursor: grab; touch-action: none; } }
@@ -103,7 +130,9 @@ import { site } from '../../data/site';
   .drag-ui { position: absolute; left: 0; right: 0; top: calc(100% + 18px); display: none; align-items: center; justify-content: space-between; gap: 12px; }
   @media (min-width: 861px) { .drag-ui { display: flex; } }
   .drag-ui--m { display: none; }
-  .drag-hint { font: 400 22px/1.1 var(--f-hand); color: var(--red); }
+  .drag-hint { font: 400 22px/1.1 var(--f-hand); color: var(--red); opacity: 0; transform: translateY(4px); transition: opacity .3s, transform .35s var(--ease-out); }
+  .hero:global(.is-arranging) .drag-hint, .hero:global(.is-arranged) .drag-hint { opacity: 1; transform: none; }
+  @media (hover: hover) { .collage:hover .drag-hint { opacity: 1; transform: none; } }
   .tidy { display: inline-flex; flex-shrink: 0; white-space: nowrap; align-items: center; gap: 6px; min-height: 36px; padding: 6px 14px; border: 1px solid var(--ink); border-radius: 999px; font: 500 13px/1 var(--f-body); background: var(--paper); opacity: 0; transform: translateY(6px); pointer-events: none; transition: opacity .3s, transform .4s var(--ease-spring), background-color .25s, color .25s; }
   .tidy:not(.is-on) { display: none; }
   .tidy.is-on { opacity: 1; transform: none; pointer-events: auto; animation: tidy-in .45s var(--ease-spring); }
@@ -116,6 +145,7 @@ import { site } from '../../data/site';
   .c--receipt { left: 41%; top: 60%; width: 57%; z-index: 3; --rot: 2deg; }
   .c--sticker { left: 0; top: 0; z-index: 4; --rot: 4deg; }
   .c--cat { left: 73%; top: 41%; width: 24%; z-index: 4; }
+  .c--cat :global(.cat__bubble) { left: auto !important; right: 72%; transform-origin: 100% 100%; }
   .c--cat.is-returning { transition-delay: .18s; }
   .portrait { aspect-ratio: 300 / 390; border-radius: 12px; border: 1px solid var(--line); padding: 38% 10% 0 22%; display: grid; align-content: start; gap: 8px; background: var(--paper) repeating-linear-gradient(to bottom, transparent 0 27px, rgb(157 184 211 / .6) 27px 28px); position: relative; }
   .portrait::before { content: ''; position: absolute; top: 0; bottom: 0; left: 12%; border-left: 1.5px solid rgb(179 38 30 / .8); }
@@ -124,6 +154,8 @@ import { site } from '../../data/site';
   .portrait--photo::before { display: none; }
   .portrait__label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .portrait__hand { font: 400 clamp(19px, 1.7vw, 24px)/1.05 var(--f-hand); }
+  .cap-miss { display: block; margin-top: .35em; }
+  .cap-red { color: var(--red); }
   .receipt { display: grid; gap: 4px; padding: clamp(12px, 1.25vw, 18px) clamp(12px, 1.25vw, 18px) 22px; background: #fff; font-size: clamp(10px, .84vw, 12px); line-height: 1.5; box-shadow: 0 10px 28px rgb(31 36 51 / .12); -webkit-mask: radial-gradient(circle 5px at 50% 100%, #0000 98%, #000) 0 0 / 14px 100%; mask: radial-gradient(circle 5px at 50% 100%, #0000 98%, #000) 0 0 / 14px 100%; }
   .receipt b { font-weight: 500; text-transform: uppercase; letter-spacing: .06em; display: flex; }
   .receipt span { display: flex; align-items: baseline; white-space: nowrap; min-width: 0; }
@@ -162,10 +194,11 @@ import { site } from '../../data/site';
     .hero__copy { display: contents; }
     .hero__copy > .eyebrow { order: -3; } .hero__title { order: -2; margin-top: 0; }
     .hero__lede { order: 1; margin-top: 0; }
-    .hero__ctas { order: 2; margin-top: 0; } .hero__story { order: 3; margin-top: 30px; } .hero__note { order: 4; margin-top: 0; }
+    .hero__ctas { order: 2; margin-top: 4px; } .hero__note { order: 6; margin-top: 0; }
     .hero__grid { gap: 22px; }
     .hero__ctas .btn { flex: 1 1 100%; }
-    .drag-ui--m { display: flex; flex-wrap: wrap; row-gap: 10px; position: static; margin-top: -6px; }
+    .drag-ui--m { order: 0; display: none; flex-wrap: wrap; row-gap: 10px; position: static; margin-top: -6px; }
+    .hero:global(.is-arranging) .drag-ui--m, .hero:global(.is-arranged) .drag-ui--m { display: flex; }
     .drag-ui--m .drag-hint { flex: 1 1 100%; }
     .drag-ui--m .drag-hint { font-size: 20px; }
     .c--sprig { left: 12%; top: 11%; width: 16%; }
@@ -176,7 +209,13 @@ import { site } from '../../data/site';
     .c--sticker { left: 6%; top: -2%; }
     .c--cat { left: 81%; top: 21%; width: 17%; }
     .portrait__hand { font-size: 16px; }
+    /* the receipt covers the lower half of the card on phones: lift the label, keep only the punchline */
+    .portrait { padding-top: 3%; gap: 2px; padding-right: 6%; }
+    .portrait .portrait__hand { font-size: 15px; line-height: .96; }
+    .cap-long { display: none; }
+    .cap-miss { margin-top: 0; }
     .receipt { font-size: 10px; padding: 12px 12px 16px; }
+    .receipt__stamp { left: 5%; font-size: 8px; letter-spacing: .04em; padding: 2px 5px; }
   }
   @media (max-width: 420px) {
     .hero__title { font-size: 11.2vw; }

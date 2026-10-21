@@ -13,19 +13,19 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
 ---
 <section class="section otb" id="off-the-books" aria-labelledby="otb-title" data-player-scope>
   <div class="shell">
-    <div class="section-head section-head--band">
-      <p class="eyebrow">04 · Off the books</p>
+    <div class="section-head section-head--band" data-anim>
+      <p class="eyebrow"><span class="folio">Fol. 04</span>Off the books</p>
       <h2 class="h2" id="otb-title">Off the books.</h2>
       <p class="lede">Unbilled hours. Entirely voluntary. No GST applicable.</p>
-      <p class="note otb__note">↳ yes, these are real. yes, I made them (Pakkuru is just vibing). no, I won’t stop mentioning it.</p>
+      <p class="note otb__note">↳ yes, these are real. yes, I made them. no, I won’t stop mentioning it.</p>
       <div class="section-motif motif-bouquet" aria-hidden="true"><Bouquet /></div>
     </div>
   </div>
 
   <div class="carousel" data-carousel>
-    <ul class="hobbies shell" data-track>
-      {hobbies.map((h) => (
-        <li class="hobby">
+    <ul class="hobbies shell" data-track data-anim-group>
+      {hobbies.map((h, i) => (
+        <li class="hobby" data-anim="right" style={`--d:${(i * 0.08).toFixed(2)}s`}>
           <div class={`art art--${h.key}`} aria-hidden={h.photo ? undefined : 'true'}>
             {site.showPlaceholderTags && <span class="ph-tag">Placeholder</span>}
             {h.photo && photoFor(h.key) && (
@@ -63,7 +63,7 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
   </div>
 
   <div class="shell">
-    <div class="player" data-player data-track-id={site.spotifyTrackId || undefined} data-preview={site.songPreview || undefined} data-preview-secs={site.songPreviewSeconds}>
+    <div class="player" data-anim="pop" data-player data-track-id={site.spotifyTrackId || undefined} data-preview={site.songPreview || undefined} data-preview-secs={site.songPreviewSeconds}>
       <button class="disc" type="button" aria-pressed="false" aria-label="Spin the record (animation only)" data-disc>
         <svg viewBox="0 0 88 88" aria-hidden="true">
           <circle cx="44" cy="44" r="44" fill="#1F2433" />
@@ -100,7 +100,7 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
   @keyframes sway { 50% { transform: rotate(3deg); } }
 
   .hobbies { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
-  .hobby h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 16px; font: 600 24px/1.2 var(--f-display); letter-spacing: -0.01em; }
+  .hobby h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin-top: 16px; font: 600 clamp(20px, 1.5vw, 24px)/1.2 var(--f-display); letter-spacing: -0.015em; }
   .unbilled { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
   .hobby p { margin-top: 8px; color: var(--muted); font-size: 15px; line-height: 1.5; }
   .art { position: relative; aspect-ratio: 275 / 300; border-radius: 14px; overflow: hidden; transition: transform .5s var(--ease-spring); }
@@ -161,25 +161,25 @@ const photoFor = (k: string) => photos[`../../assets/hobbies/${k}.jpg`]?.default
   .player__embed iframe { display: block; width: 100%; height: 152px; border: 0; border-radius: 12px; }
 
   @media (max-width: 1100px) {
-    .player { grid-template-columns: 72px 1fr; gap: 16px 18px; }
+    .player { grid-template-columns: 72px 1fr; gap: 18px 18px; padding: 22px; }
     .disc { width: 72px; height: 72px; }
     .player__progress, .play-btn, .player__note { grid-column: 1 / -1; }
     .play-btn { justify-self: stretch; }
   }
   @media (max-width: 1100px) {
     .carousel { position: relative; }
-    .hobbies { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: var(--pad-l); scrollbar-width: none; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
+    .hobbies { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: var(--pad-l); scrollbar-width: none; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
     .hobbies::-webkit-scrollbar { display: none; }
     .hobby { flex: 0 0 min(72vw, 300px); scroll-snap-align: start; }
     .art { aspect-ratio: 260 / 240; }
-    .dots { display: flex; gap: 6px; padding-left: var(--pad-l); margin-top: 18px; align-items: center; }
+    .dots { display: flex; gap: 6px; padding-left: var(--pad-l); margin-top: 22px; align-items: center; }
     .dots i { width: 6px; height: 6px; border-radius: 3px; background: var(--lav-s); opacity: .4; transition: width .35s var(--ease-out), opacity .35s; }
     .dots i.is-on { width: 18px; opacity: 1; background: var(--dlav); }
     .swipe-hint { display: block; margin-top: 6px; font-size: 22px; }
   }
   @media (max-width: 860px) {
-    .motif-bouquet { width: 72px; }
-    .section-head { --motif-w: 72px; }
+    .motif-bouquet { width: 76px; top: 24px; }
+    .section-head { --motif-w: 84px; }
     .yarn-row { padding-right: 10px; }
     .yarn { width: 92px; }
   }

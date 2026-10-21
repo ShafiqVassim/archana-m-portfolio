@@ -6,8 +6,8 @@ import { assets } from '../../data/site';
 ---
 <section class="section" id="assets" aria-labelledby="assets-title">
   <div class="shell">
-    <div class="section-head section-head--band">
-      <p class="eyebrow">03 · Assets</p>
+    <div class="section-head section-head--band" data-anim>
+      <p class="eyebrow"><span class="folio">Fol. 03</span>Current assets</p>
       <h2 class="h2" id="assets-title">Assets. (Liquid, mostly.)</h2>
       <p class="lede">The skills, listed plainly. No progress bars. Nobody can explain what 85% of Tally means.</p>
       <div class="section-motif motif-flowers" aria-hidden="true">
@@ -16,27 +16,27 @@ import { assets } from '../../data/site';
     </div>
     <div class="assets-wrap">
     <ul class="assets">
-      {assets.map((a) => (
-        <li class="asset">
+      {assets.map((a, i) => (
+        <li class="asset" data-anim style={`--d:${(i * 0.05).toFixed(2)}s`}>
           <span class="asset__code mono" aria-hidden="true"><span>{a.code}</span><span>✓ Posted</span></span>
           <h3>{a.name}</h3>
           <p>{a.desc}</p>
         </li>
       ))}
-      <li class="asset asset--liab">
+      <li class="asset asset--liab" data-anim style="--d:.35s">
         <span class="peek peek--card" data-reveal aria-hidden="true"><span class="peek__move"><CatPeek /></span></span>
-        <span class="pk-bubble liab-bubble" aria-hidden="true">you didn’t see me.</span>
-        <span class="peek peek--list" data-poke data-greet data-greet-soft aria-hidden="true"><span class="peek__clip"><span class="peek__move"><span class="peek__rot"><CatPeek /></span></span></span><span class="pk-bubble" data-line="you didn’t see me." data-greet-line="hi.">hi.</span></span>
+        <span class="pk-bubble liab-bubble" aria-hidden="true" data-review>hi.</span>
+        <span class="peek peek--list" aria-hidden="true"><span class="peek__clip"><span class="peek__move"><span class="peek__rot"><CatPeek /></span></span></span><span class="pk-bubble" data-review>hi.</span></span>
         <button type="button" class="liab" data-liab aria-live="polite">
           <span class="asset__code mono">L-01</span>
           <span class="liab__title">Liabilities</span>
-          <span class="liab__text" data-a>Owns more yarn than storage. Hums while reconciling. Working on one of these.</span>
-          <span class="liab__text" data-b hidden>Audit note: yarn reclassified as an asset. Humming remains under review.</span>
-          <span class="liab__hint mono">Tap to audit</span>
+          <span class="liab__text" data-a>My weak spots: I buy too much yarn. I hum while I work. My cat sits on my files.</span>
+          <span class="liab__text" data-b hidden>Pakkuru’s review: Yarn? Fine. Humming? Fine. Cat on the files? Perfect. ✓</span>
+          <span class="liab__hint mono">Tap for Pakkuru’s review</span>
         </button>
       </li>
     </ul>
-    <p class="note liab-note" aria-hidden="true">↳ the real liability <span class="liab-face"><CatPeek /></span></p>
+    <button type="button" class="note liab-note" data-anim style="--d:.45s" data-liab-reveal aria-label="Show the real liability">↳ the real liability</button>
     </div>
   </div>
 </section>
@@ -65,19 +65,20 @@ import { assets } from '../../data/site';
   .peek__move { display: block; width: 100%; height: 100%; transition: transform .45s var(--ease-spring); }
   /* desktop/tablet: peeks out from behind the card edge; hides while the card is hovered */
   .peek--card { left: calc(100% - 12px); top: 34px; width: 82px; height: 117px; overflow: hidden; pointer-events: none; }
-  :global(html.motion-ok) .peek--card .peek__move { transform: translateX(-100%); }
-  :global(html.motion-ok) .peek--card:global(.is-in) .peek__move { transform: none; transition-delay: .25s; }
-  .asset--liab:hover .peek--card .peek__move { transform: translateX(-100%) !important; transition-delay: 0s !important; }
+  .peek--card { pointer-events: auto; cursor: pointer; }
+  .peek--card .peek__move { transition: transform .45s var(--ease-spring); }
+  :global(html.motion-ok) .peek--card:not(:global(.is-in)) .peek__move { transform: translateX(-100%); }
+  .asset--liab:global(.is-hiding) .peek--card .peek__move { transform: translateX(-100%); transition-duration: .3s; }
+  .asset--liab:global(.is-talking) .liab-bubble, .asset--liab:global(.is-talking) .peek--list .pk-bubble { opacity: 1; transform: none; }
+  .liab-note { display: block; width: 100%; cursor: pointer; background: none; border: 0; color: var(--red); }
+  .liab-note:hover { text-decoration: underline dotted 1.5px; text-underline-offset: 4px; }
   .liab-bubble { right: -18px; top: -34px; }
-  .asset--liab:hover .liab-bubble { opacity: 1; transform: none; }
+  @media (hover: none), (max-width: 640px) { .liab-bubble { display: none; } }
   .peek--list { display: none; }
   .peek :global(.peek-eyes) { transform-box: fill-box; transform-origin: center; }
   :global(html.motion-ok) .peek :global(.peek-eyes) { animation: peek-blink 5s infinite; }
   @keyframes peek-blink { 0%, 92%, 100% { transform: scaleX(1); } 95% { transform: scaleX(.12); } }
   .liab-note { text-align: right; margin-top: 10px; padding-right: 12px; font-size: 22px; }
-  .liab-face { display: inline-block; width: 22px; height: 31px; vertical-align: -9px; margin-left: 4px; transform: rotate(-90deg); }
-  .liab-face :global(svg) { width: 100%; height: 100%; display: block; }
-  :global(html.motion-ok) .liab-face { animation: face-bob 2.4s ease-in-out infinite; }
   @keyframes face-bob { 50% { transform: rotate(-90deg) translateX(3px); } }
   .liab { display: grid; align-content: start; gap: 12px; width: 100%; height: 100%; padding: 26px; text-align: left; border-radius: inherit; }
   .liab .asset__code { color: var(--ink); }
@@ -89,7 +90,7 @@ import { assets } from '../../data/site';
   @keyframes wobble { 20% { transform: rotate(-3deg); } 45% { transform: rotate(2.5deg); } 70% { transform: rotate(-1.2deg); } }
 
   @media (max-width: 1100px) { .assets { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 860px) { .motif-flowers { width: 88px; } .section-head { --motif-w: 88px; } }
+  @media (max-width: 860px) { .motif-flowers { width: 96px; top: 46px; } .section-head { --motif-w: 92px; } }
   @media (max-width: 640px) {
     .asset--liab { display: block; padding: 0; }
     .peek--card { display: none; }
@@ -101,18 +102,18 @@ import { assets } from '../../data/site';
     .peek--list { display: block; right: 14px; top: -44px; width: 66px; height: 46px; cursor: pointer; }
     .peek__clip { position: absolute; inset: 0; overflow: hidden; }
     .peek__rot { position: absolute; left: 11px; top: -9px; width: 44px; height: 63px; transform: rotate(-90deg); }
-    :global(html.motion-ok) .peek--list .peek__move { transform: translateY(105%); }
-    :global(html.motion-ok) .peek--list:global(.is-talking) .peek__move, :global(html.motion-ok) .peek--list:global(.is-seen) .peek__move { transform: none; }
-    .peek--list:global(.is-poked) .peek__move { transform: translateY(105%) !important; transition-duration: .25s; }
+    .peek--list .peek__move { transition: transform .45s var(--ease-spring); }
+    .peek--list .peek__move { transform: none; }
+    .asset--liab:global(.is-hiding) .peek--list .peek__move { transform: translateY(105%); transition-duration: .3s; }
     .peek--list .pk-bubble { right: 4px; top: 54px; transform-origin: 80% 0%; }
     .assets { grid-template-columns: 1fr; gap: 0; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-    .asset { grid-template-columns: 48px 1fr; gap: 3px 12px; padding: 16px 18px; border: 0; border-radius: 0; }
+    .asset { grid-template-columns: 48px 1fr; gap: 4px 12px; padding: 18px 20px; border: 0; border-radius: 0; }
     .asset + .asset { border-top: 1px solid var(--line); }
     .asset:hover { transform: none; box-shadow: none; }
-    .asset__code { grid-row: span 2; font-size: 12px; padding-top: 4px; }
+    .asset__code { grid-row: span 2; font-size: 12px; margin-top: 4px; }
     .asset h3 { font-size: 18px; }
     .asset p { font-size: 14px; }
-    .liab { grid-template-columns: 48px 1fr; gap: 3px 12px; padding: 16px 18px; }
+    .liab { grid-template-columns: 48px 1fr; gap: 4px 12px; padding: 20px 20px 18px; }
     .liab .asset__code { grid-row: span 3; }
     .liab__title { font-size: 18px; } .liab__text { font-size: 14px; }
     .liab__hint { grid-column: 2; margin-top: 6px; }

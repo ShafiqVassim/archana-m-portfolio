@@ -5,8 +5,8 @@ import { experience } from '../../data/site';
 ---
 <section class="section" id="ledger" aria-labelledby="ledger-title">
   <div class="shell">
-    <div class="section-head section-head--band">
-      <p class="eyebrow">02 · Statement of account</p>
+    <div class="section-head section-head--band" data-anim>
+      <p class="eyebrow"><span class="folio">Fol. 02</span>Statement of account</p>
       <h2 class="h2" id="ledger-title">Where the numbers have been.</h2>
       <p class="lede">Three employers, one consistent habit: everything gets written down, dated, and filed where it belongs.</p>
       <div class="section-motif motif-rangoli" aria-hidden="true" data-scroll-spin="0.06"><Rangoli /></div>
@@ -30,7 +30,7 @@ import { experience } from '../../data/site';
       ))}
     </div>
     </div>
-    <div class="paw-row" aria-hidden="true" data-reveal>
+    <div class="paw-row" aria-hidden="true" data-reveal data-anim>
       <span class="note">↳ paw-reviewed by Pakkuru</span>
       <PawTrail class="paw-row__trail" />
     </div>
@@ -48,7 +48,7 @@ import { experience } from '../../data/site';
   @keyframes step { 0% { opacity: 0; transform: scale(.6); } 6% { opacity: 1; transform: none; } 58% { opacity: 1; } 74%, 100% { opacity: 0; } }
   .paw-row :global(.trail-paw) { transform-box: fill-box; transform-origin: center; }
   .paw-row :global(.paw-row__trail) { width: 300px; }
-  @media (max-width: 860px) { .paw-row :global(.paw-row__trail) { width: 180px; } .paw-row .note { font-size: 19px; } }
+  @media (max-width: 860px) { .paw-row { margin-top: 22px; justify-content: space-between; gap: 10px; } .paw-row :global(.paw-row__trail) { width: 140px; flex-shrink: 1; min-width: 0; } .paw-row .note { font-size: 18px; white-space: nowrap; } }
   .ledger { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .ledger__head, .ledger__row { display: grid; grid-template-columns: 190fr 290fr 420fr 152fr; gap: 20px; padding: 26px 24px; }
   .ledger__head { background: var(--ink); color: var(--paper); padding-block: 18px; font: 500 12px/1 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; }
@@ -74,11 +74,11 @@ import { experience } from '../../data/site';
   @keyframes stamp-down { from { opacity: 0; transform: scale(1.7) rotate(-6deg); } to { opacity: 1; transform: none; } }
 
   @media (max-width: 860px) {
-    .motif-rangoli { width: 80px; }
-    .section-head { --motif-w: 80px; }
-    .ledger { background: none; border: 0; border-radius: 0; overflow: visible; display: grid; gap: 16px; }
+    .motif-rangoli { width: 96px; top: 40px; }
+    .section-head { --motif-w: 92px; }
+    .ledger { background: none; border: 0; border-radius: 0; overflow: visible; display: grid; gap: 20px; }
     .ledger__head { display: none; }
-    .ledger__row, .ledger__row:nth-child(odd) { background: var(--paper); border: 1px solid var(--line) !important; border-radius: var(--radius); grid-template-columns: 1fr auto; grid-template-areas: 'date stamp' 'rule rule' 'part part' 'entries entries' 'note note'; gap: 10px 12px; padding: 22px; }
+    .ledger__row, .ledger__row:nth-child(odd) { background: var(--paper); border: 1px solid var(--line) !important; border-radius: var(--radius); grid-template-columns: 1fr auto; grid-template-areas: 'date stamp' 'rule rule' 'part part' 'entries entries' 'note note'; gap: 10px 12px; padding: 24px; }
     .ledger__row::before { content: ''; grid-area: rule; border-top: 1px dashed var(--line); }
     .ledger__date { grid-area: date; font-size: 12px; }
     .ledger__date br { display: none; }

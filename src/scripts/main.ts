@@ -38,6 +38,9 @@ if (html.classList.contains('splash-on') && splash) {
   window.setTimeout(() => finish(false), 1750);
 }
 
+/* ── Headline: lines are clipped only while they rise, so Pakkuru can peek over his name afterwards ── */
+$$('.line > span').forEach((sp) => sp.addEventListener('animationend', () => sp.parentElement?.classList.add('done'), { once: true }));
+
 /* ── Toast (receipt) ───────────────────────────── */
 const toastEl = $('#toast');
 let toastTimer = 0;
@@ -129,9 +132,14 @@ if ('IntersectionObserver' in window) {
   const revealIO = new IntersectionObserver((es) => es.forEach((e) => {
     if (e.isIntersecting) { e.target.classList.add('is-in'); revealIO.unobserve(e.target); }
   }), { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-  $$('[data-reveal]').forEach((el) => revealIO.observe(el));
+  // items inside a group (e.g. the swipe carousel) arrive together when the group does, even if off-screen sideways
+  $$('[data-reveal], [data-anim]').forEach((el) => { if (!el.closest('[data-anim-group]')) revealIO.observe(el); });
+  const groupIO = new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting) { $$('[data-anim]', e.target).forEach((c) => c.classList.add('is-in')); groupIO.unobserve(e.target); }
+  }), { threshold: 0.15 });
+  $$('[data-anim-group]').forEach((g) => groupIO.observe(g));
 } else {
-  $$('[data-reveal]').forEach((el) => el.classList.add('is-in'));
+  $$('[data-reveal], [data-anim]').forEach((el) => el.classList.add('is-in'));
 }
 
 /* ── Hero parallax (fine pointers only) ────────── */
@@ -152,73 +160,54 @@ if (collage && motionOK && finePointer) {
   hero.addEventListener('pointerleave', () => { collage.style.setProperty('--mx', '0'); collage.style.setProperty('--my', '0'); });
 }
 
-/* ── Hero: rearrange the desk. Mouse: just drag. Touch: press & hold, then drag (a quick swipe still scrolls). ── */
+/* ── Hero: rearrange the desk. Mouse, pen or finger: just drag. ── */
 const tidyBtns = $$('[data-tidy]');
 if (collage) {
   const hero = collage.closest('section')!;
   let z = 10;
   const pieces = $$('.c', collage);
-  // "Tidy up" exists only while something is actually out of place
+  // "Tidy up" and the hint exist only while something is out of place (or being dragged)
   const moved = (el: HTMLElement) => Math.abs(parseFloat(el.style.getPropertyValue('--dx')) || 0) + Math.abs(parseFloat(el.style.getPropertyValue('--dy')) || 0) > 3;
-  const syncTidy = () => { const on = pieces.some(moved); tidyBtns.forEach((b) => b.classList.toggle('is-on', on)); };
+  const syncTidy = () => { const on = pieces.some(moved); tidyBtns.forEach((b) => b.classList.toggle('is-on', on)); hero.classList.toggle('is-arranged', on); };
   const begin = (el: HTMLElement, x0: number, y0: number) => {
     const baseX = parseFloat(el.style.getPropertyValue('--dx')) || 0;
     const baseY = parseFloat(el.style.getPropertyValue('--dy')) || 0;
     const box = hero.getBoundingClientRect(), r0 = el.getBoundingClientRect();
-    el.classList.remove('is-returning', 'is-pressing');
-    el.classList.add('is-dragging');
+    el.classList.remove('is-returning');
+    el.classList.add('is-dragging'); hero.classList.add('is-arranging');
     el.style.zIndex = String(++z);
     el.dispatchEvent(new CustomEvent('piece:start', { detail: { x: x0 } }));
     return {
       move(x: number, y: number) {
-        // keep at least half of the piece inside the hero
         const dx = Math.max(box.left - r0.left - r0.width / 2, Math.min(box.right - r0.right + r0.width / 2, x - x0));
         const dy = Math.max(box.top - r0.top - r0.height / 2, Math.min(box.bottom - r0.bottom + r0.height / 2, y - y0));
         el.style.setProperty('--dx', `${baseX + dx}px`);
         el.style.setProperty('--dy', `${baseY + dy}px`);
         el.dispatchEvent(new CustomEvent('piece:move', { detail: { x } }));
       },
-      end() { el.classList.remove('is-dragging'); syncTidy(); el.dispatchEvent(new CustomEvent('piece:end')); },
+      end() { el.classList.remove('is-dragging'); hero.classList.remove('is-arranging'); syncTidy(); el.dispatchEvent(new CustomEvent('piece:end')); },
     };
   };
   pieces.forEach((el) => {
-    // Mouse / pen
     el.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'touch' || e.button !== 0) return;
+      if (e.button !== 0) return;
       e.preventDefault();
       const sx = e.clientX, sy = e.clientY;
       let d: ReturnType<typeof begin> | null = null;
       el.setPointerCapture(e.pointerId);
       const move = (ev: PointerEvent) => {
-        if (!d) { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 4) return; d = begin(el, sx, sy); }
+        if (!d) { if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 5) return; d = begin(el, sx, sy); }
         d.move(ev.clientX, ev.clientY);
       };
       const up = () => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up); if (d) d.end(); else el.dispatchEvent(new CustomEvent('piece:tap')); };
       el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
     });
-    // Touch: press & hold
-    let timer = 0, sx = 0, sy = 0, swiped = false;
-    let d: ReturnType<typeof begin> | null = null;
-    el.addEventListener('touchstart', (e) => {
-      if (e.touches.length !== 1) return;
-      sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiped = false;
-      el.classList.add('is-pressing');
-      timer = window.setTimeout(() => { d = begin(el, sx, sy); navigator.vibrate?.(12); }, 280);
-    }, { passive: true });
-    el.addEventListener('touchmove', (e) => {
-      const t = e.touches[0];
-      if (d) { e.preventDefault(); d.move(t.clientX, t.clientY); return; }
-      if (Math.hypot(t.clientX - sx, t.clientY - sy) > 8) { swiped = true; clearTimeout(timer); el.classList.remove('is-pressing'); }
-    }, { passive: false });
-    const endTouch = () => { clearTimeout(timer); el.classList.remove('is-pressing'); if (d) { d.end(); d = null; } else if (!swiped) el.dispatchEvent(new CustomEvent('piece:tap')); };
-    el.addEventListener('touchend', endTouch);
-    el.addEventListener('touchcancel', endTouch);
     el.addEventListener('contextmenu', (e) => e.preventDefault());
     el.addEventListener('dragstart', (e) => e.preventDefault());
   });
   const tidy = () => {
     pieces.forEach((el) => { el.classList.add('is-returning'); el.style.removeProperty('--dx'); el.style.removeProperty('--dy'); el.style.zIndex = ''; });
-    tidyBtns.forEach((b) => b.classList.remove('is-on'));
+    tidyBtns.forEach((b) => b.classList.remove('is-on')); hero.classList.remove('is-arranged');
   };
   tidyBtns.forEach((b) => b.addEventListener('click', tidy));
 }
@@ -274,10 +263,10 @@ if (motionOK && finePointer) {
   });
 }
 
-/* ── Résumé: approval stamp ────────────────────── */
+/* ── Resume: approval stamp ────────────────────── */
 $$('[data-stamp]').forEach((el) => el.addEventListener('click', () => {
   el.classList.remove('is-stamped'); void el.offsetWidth; el.classList.add('is-stamped');
-  toast('Résumé released ✓', ['Archana-M-Resume.pdf', 'Approved by: Archana', 'Audited by: also Archana']);
+  toast('Resume released ✓', ['Archana-M-Resume.pdf', 'Approved by: Archana', 'Audited by: also Archana']);
 }));
 
 /* ── Email: copy + receipt, mail app still opens ── */
@@ -305,7 +294,7 @@ function loadEmbed() {
   embed.append(f); embed.hidden = false;
   return true;
 }
-if (trackId && disc) disc.setAttribute('aria-label', `Play ${site.song.title} here`);
+if ((trackId || player?.dataset.preview) && disc) disc.setAttribute('aria-label', `Play ${site.song.title} here`);
 // Optional local preview (only if site.songPreview is set): plays N seconds, then nudges to Spotify.
 const previewSrc = player?.dataset.preview;
 const previewSecs = Number(player?.dataset.previewSecs || 12);
@@ -326,7 +315,12 @@ function togglePreview() {
   audio.play().then(() => {
     setPlaying(true);
     if (scope) { scope.style.setProperty('--preview', `${previewSecs}s`); scope.classList.add('is-preview'); }
-    stopTimer = window.setTimeout(() => stopPreview(true), previewSecs * 1000);
+    if (previewSecs > 0) stopTimer = window.setTimeout(() => stopPreview(true), previewSecs * 1000);
+    else {
+      const a = audio!;
+      if (scope && isFinite(a.duration)) scope.style.setProperty('--preview', `${a.duration}s`);
+      a.onended = () => { setPlaying(false); scope?.classList.remove('is-preview'); };
+    }
   }).catch(() => toast('Couldn’t play the preview', ['Try the Spotify button instead.']));
   return true;
 }
@@ -374,11 +368,27 @@ $$('[data-play]').forEach((el) => el.addEventListener('click', () => {
 }));
 
 /* ── Liabilities: tap to audit ─────────────────── */
+/* Liabilities: Pakkuru peeks from the card; hover (or tap) him and he ducks — "you didn't see me." — then peeks back */
+const liabCard = $('.asset--liab');
+let liabT = 0, talkT = 0;
+const liabTalk = (line: string) => {
+  if (!liabCard) return;
+  $$('[data-review]', liabCard).forEach((b) => { b.textContent = line; });
+  liabCard.classList.remove('is-talking'); void liabCard.offsetWidth; liabCard.classList.add('is-talking');
+  window.clearTimeout(talkT); talkT = window.setTimeout(() => liabCard.classList.remove('is-talking'), 1800);
+};
+const liabHide = () => { if (!liabCard || liabCard.classList.contains('is-hiding')) return; window.clearTimeout(liabT); liabCard.classList.add('is-hiding'); liabTalk('you didn’t see me.'); };
+const liabBack = (ms: number) => { window.clearTimeout(liabT); liabT = window.setTimeout(() => liabCard?.classList.remove('is-hiding'), ms); };
+// "the real liability" → he comes out (if hiding) and owns it
+$('[data-liab-reveal]')?.addEventListener('click', () => { window.clearTimeout(liabT); liabCard?.classList.remove('is-hiding'); liabTalk('that’s me.'); });
+$$('.peek--card').forEach((pk) => { pk.addEventListener('mouseenter', liabHide); pk.addEventListener('mouseleave', () => liabBack(1400)); });
+$$('.peek--list').forEach((pk) => pk.addEventListener('click', () => { liabHide(); liabBack(2600); }));
 $$('[data-liab]').forEach((b) => b.addEventListener('click', () => {
   const a = $('[data-a]', b)!, c = $('[data-b]', b)!, hint = $('.liab__hint', b)!;
   const audited = a.hidden;
   a.hidden = !audited; c.hidden = audited;
-  hint.textContent = audited ? 'Tap to audit' : 'Tap to restate';
+  hint.textContent = audited ? 'Tap for Pakkuru’s review' : 'Reviewed by Pakkuru · tap to go back';
+  if (!audited && !liabCard?.classList.contains('is-hiding')) liabTalk('approved ✓');
   b.classList.remove('is-wobble'); void b.offsetWidth; b.classList.add('is-wobble');
 }));
 
