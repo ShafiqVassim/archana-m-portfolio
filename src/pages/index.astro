@@ -11,7 +11,6 @@ import Documents from '../components/sections/Documents.astro';
 import Contact from '../components/sections/Contact.astro';
 import StickyBar from '../components/sections/StickyBar.astro';
 import ContentsDialog from '../components/sections/ContentsDialog.astro';
-import Follower from '../components/Follower.astro';
 import { site } from '../data/site';
 ---
 <Base title={`${site.name} · ${site.role} in Coimbatore`} description={site.description}>
@@ -28,9 +27,7 @@ import { site } from '../data/site';
   </main>
   <StickyBar />
   <ContentsDialog />
-  <Follower />
 </Base>
 <script>
   import '../scripts/main.ts';
-  import '../scripts/follow.ts';
 </script>

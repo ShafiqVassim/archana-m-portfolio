@@ -127,9 +127,3 @@ links in the header, no phone number). Re-export from Figma and replace this fil
 `public/audio/veesum-velichathile-archana.mp3` is Archana’s own recording (19 s). Tapping the record plays it in full
 (`site.songPreviewSeconds: 0`). To swap it, replace the file or point `site.songPreview` at another clip.
 
-## Pakkuru follows the cursor (desktop)
-
-`src/components/Follower.astro` + `src/scripts/follow.ts`. Outside the hero, a small Pakkuru trails the pointer: follows,
-sits after 1 s, naps after 8 s, tilts his head over links and buttons, hops on click. Native cursor is never replaced and
-clicks pass through him. Off on touch screens and with reduced motion; the footer switch “Pakkuru: following / staying” is
-remembered per browser. Spec: Figma node 187:3442.
