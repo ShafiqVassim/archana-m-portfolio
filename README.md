@@ -119,8 +119,9 @@ Three options, in order of preference:
 
 ## Résumé
 
-`public/archana-m-resume.pdf` is the latest résumé exported from the Figma frame “Archana-M-Resume” (Portfolio and email
-links in the header, no phone number). Re-export from Figma and replace this file to update it.
+`public/archana-m-resume.pdf` (38 KB, includes phone number) is built from `resume-source/resume.html` with real Inter text, so it stays sharp,
+light and readable by screening software. It matches the Figma frame “Archana-M-Resume · Clean”. To update: edit the HTML,
+then print it to an A4 PDF (Chrome → Print → Save as PDF, margins none, background graphics on).
 
 ## Song
 
