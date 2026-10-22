@@ -6,7 +6,7 @@ export const site = {
   role: 'Accountant',
   location: 'Coimbatore, Tamil Nadu',
   email: 'archanamanikandan24@gmail.com',
-  linkedin: 'https://www.linkedin.com/in/archana-manikandan-39b76816a/',
+  linkedin: 'https://www.linkedin.com/in/archana-m-accountant/',
   resume: '/archana-m-resume.pdf',
   // TODO: replace with the exact track link (Spotify → Share → Copy song link).
   spotify: 'https://open.spotify.com/search/Veesum%20Velichathile',
